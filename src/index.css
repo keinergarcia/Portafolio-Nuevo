@@ -138,8 +138,8 @@
 
   .grid-glow {
     background-image:
-      linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
-    background-size: 56px 56px;
+      linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
 }
