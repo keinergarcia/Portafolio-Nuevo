@@ -181,9 +181,9 @@ export function Galaxy({ starCount, armCount = 3, radius = 7, assemblyDuration }
       : 1
 
     if (g) {
-      g.rotation.z = Math.sin(t * 0.05) * 0.04
+      g.rotation.z = Math.sin(t * 0.05) * 0.04 + (1 - assembly) * 0.14
       g.position.set(0, 0, -6)
-      g.scale.setScalar(Math.max(0.0001, 0.01 + assembly))
+      g.scale.setScalar(Math.max(0.0001, 0.01 + 0.99 * assembly))
     }
     if (c) {
       const pulse = 1 + Math.sin(t * 0.5) * 0.05

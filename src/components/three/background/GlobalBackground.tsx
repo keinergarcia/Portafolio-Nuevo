@@ -1,16 +1,16 @@
 /* oxlint-disable react/immutability -- el objeto `scene` es un hub mutable compartido con el loop de frames (sistema externo) */
 import { Suspense, useEffect, useMemo, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
+import { Sparkles } from '@react-three/drei'
 import { useReducedMotion } from 'motion/react'
 import * as THREE from 'three'
 import { SPACE_CONFIG, useSpaceTier } from './useSpaceTier'
 import type { SpaceStateValue } from './space-context'
 import { SpaceStateProvider, useSpaceState } from './space-context'
+import { useEffects } from '@/contexts/Effects'
 import { ParticleField } from './ParticleField'
-import { Galaxy } from './Galaxy'
-import { MagnetField } from './MagnetField'
+import { StarTrail } from './StarTrail'
 import { CameraRig } from './CameraRig'
-import { useIntro } from '@/contexts/Intro'
 
 function supportsWebGL() {
   try {
@@ -24,27 +24,39 @@ function supportsWebGL() {
   }
 }
 
-const MAGNET_COUNT = {
-  desktop: 240,
-  tablet: 140,
-  mobile: 85,
-} as const
-
-const MAGNET_RADIUS = {
-  desktop: 8,
-  tablet: 7,
-  mobile: 6,
-} as const
-
-const GALAXY_STARS = {
-  desktop: 3400,
-  tablet: 1900,
-  mobile: 1100,
-} as const
+function ColorfulStars({ reduce }: { reduce: boolean }) {
+  const layers = reduce
+    ? [
+        { count: 60, z: -7, size: 2.4, speed: 0.2, color: '#7dd3fc' },
+        { count: 50, z: -5, size: 2.8, speed: 0.18, color: '#c4b5fd' },
+      ]
+    : [
+        { count: 170, z: -8, size: 2.6, speed: 0.22, color: '#7dd3fc' },
+        { count: 150, z: -6, size: 2.9, speed: 0.2, color: '#c4b5fd' },
+        { count: 130, z: -4, size: 3.1, speed: 0.28, color: '#f6c453' },
+        { count: 110, z: -10, size: 2.4, speed: 0.24, color: '#5eead4' },
+        { count: 100, z: -3, size: 3.3, speed: 0.3, color: '#f9a8d4' },
+      ]
+  return (
+    <>
+      {layers.map((layer) => (
+        <Sparkles
+          key={`${layer.color}-${layer.z}`}
+          count={layer.count}
+          scale={[24, 15, 4]}
+          position={[0, 0, layer.z]}
+          size={layer.size}
+          speed={layer.speed}
+          color={layer.color}
+          opacity={0.75}
+        />
+      ))}
+    </>
+  )
+}
 
 function SceneContents() {
   const { tier, reduce } = useSpaceState()
-  const { done } = useIntro()
   const cfg = SPACE_CONFIG[tier]
 
   const counts = reduce
@@ -52,13 +64,11 @@ function SceneContents() {
         starCount: Math.floor(cfg.starCount * 0.3),
         particleCount: Math.floor(cfg.particleCount * 0.28),
         accentCount: Math.floor(cfg.accentCount * 0.25),
-        magnetCount: Math.floor(MAGNET_COUNT[tier] * 0.25),
       }
     : {
         starCount: cfg.starCount,
         particleCount: cfg.particleCount,
         accentCount: cfg.accentCount,
-        magnetCount: MAGNET_COUNT[tier],
       }
 
   return (
@@ -68,8 +78,7 @@ function SceneContents() {
         particleCount={counts.particleCount}
         accentCount={counts.accentCount}
       />
-      {!done && <Galaxy starCount={GALAXY_STARS[tier]} />}
-      <MagnetField count={counts.magnetCount} radius={MAGNET_RADIUS[tier]} />
+      <ColorfulStars reduce={reduce} />
     </>
   )
 }
@@ -77,6 +86,7 @@ function SceneContents() {
 export function GlobalBackground() {
   const tier = useSpaceTier()
   const reduce = Boolean(useReducedMotion())
+  const { background3D } = useEffects()
   const [hidden, setHidden] = useState(false)
   const webgl = useMemo(() => supportsWebGL(), [])
 
@@ -108,7 +118,8 @@ export function GlobalBackground() {
   if (!webgl) return null
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
+    <>
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
       <div
         className="absolute inset-0"
         style={{
@@ -129,22 +140,24 @@ export function GlobalBackground() {
           style={{ pointerEvents: 'none' }}
         >
           <SpaceStateProvider value={scene}>
-            <SceneContents />
+            {background3D && <SceneContents />}
             <CameraRig animate={!reduce} />
           </SpaceStateProvider>
         </Canvas>
       </Suspense>
       <div
         className="absolute inset-0"
-        style={{ background: 'rgba(0, 0, 0, 0.35)' }}
+        style={{ background: 'rgba(0, 0, 0, 0.26)' }}
       />
       <div
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(ellipse at center, rgba(0,0,0,0) 52%, rgba(0,0,0,0.6) 100%)',
+            'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%)',
         }}
       />
-    </div>
+      </div>
+      <StarTrail />
+    </>
   )
 }
