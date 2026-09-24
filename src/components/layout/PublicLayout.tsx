@@ -4,7 +4,9 @@ import { motion, useScroll, useSpring } from 'motion/react'
 import { Navbar } from '@/components/navigation/Navbar'
 import { MobileMenu } from '@/components/navigation/MobileMenu'
 import { Footer } from '@/components/navigation/Footer'
+import { FxPanel } from '@/components/effects/FxPanel'
 import { IntroProvider } from '@/contexts/Intro'
+import { EffectsProvider } from '@/contexts/Effects'
 import { SplashScreen } from '@/components/three/SplashScreen'
 
 const GlobalBackground = lazy(() =>
@@ -39,10 +41,11 @@ export function PublicLayout() {
 
   return (
     <IntroProvider>
-      <div className="relative flex min-h-svh flex-col">
-        <Suspense fallback={null}>
-          <GlobalBackground />
-        </Suspense>
+      <EffectsProvider>
+        <div className="relative flex min-h-svh flex-col">
+          <Suspense fallback={null}>
+            <GlobalBackground />
+          </Suspense>
 
         <a
           href="#main-content"
@@ -69,8 +72,10 @@ export function PublicLayout() {
         <div className="relative z-10">
           <Footer />
         </div>
-      </div>
-      <SplashScreen />
+        </div>
+        <SplashScreen />
+        <FxPanel />
+      </EffectsProvider>
     </IntroProvider>
   )
 }
