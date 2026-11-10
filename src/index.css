@@ -52,6 +52,16 @@
   }
 }
 
+@keyframes tech-bob {
+  0%,
+  100% {
+    transform: translate3d(0, 2px, 0);
+  }
+  50% {
+    transform: translate3d(0, -7px, 0);
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -142,4 +152,234 @@
       linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
     background-size: 48px 48px;
   }
+
+  /* ----------------------------------------------------------------
+     Stack 3D: fichas con logo oficial, flotación continua y salto
+     elástico al pasar el cursor (con inclinación según el puntero).
+     ---------------------------------------------------------------- */
+
+  .tech-slot {
+    --tech-color: var(--color-primary);
+    position: relative;
+    flex: 0 0 auto;
+    perspective: 900px;
+    padding-bottom: 0.7rem;
+  }
+
+  .tech-float {
+    position: relative;
+    z-index: 1;
+    transform-style: preserve-3d;
+    animation: tech-bob var(--tech-duration, 5.2s) ease-in-out infinite;
+    animation-delay: var(--tech-delay, 0s);
+    will-change: transform;
+  }
+
+  .tech-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    width: 6.5rem;
+    height: 6.5rem;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--tech-color) 18%, rgba(255, 255, 255, 0.1));
+    background:
+      radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--tech-color) 22%, transparent), transparent 62%),
+      linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015) 45%, rgba(2, 4, 10, 0.55));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -14px 24px -18px rgba(0, 0, 0, 0.9),
+      0 18px 32px -22px color-mix(in srgb, var(--tech-color) 65%, transparent);
+    transform-style: preserve-3d;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.3s ease;
+  }
+
+  /* Cara trasera: da grosor real a la ficha al inclinarse */
+  .tech-tile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(180deg, #101627, #06080f);
+    transform: translateZ(-14px);
+    box-shadow: 0 26px 40px -26px rgba(0, 0, 0, 0.95);
+  }
+
+  /* Brillo superior */
+  .tech-tile::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(140deg, rgba(255, 255, 255, 0.18), transparent 38%);
+    transform: translateZ(1px);
+    pointer-events: none;
+  }
+
+  .tech-tile-face {
+    display: grid;
+    place-items: center;
+    width: 2.85rem;
+    height: 2.85rem;
+    transform: translateZ(22px);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .tech-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.55));
+  }
+
+  .tech-monogram {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--tech-color) 18%, transparent);
+    color: var(--tech-color);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+
+  .tech-name {
+    padding: 0 0.2rem;
+    color: var(--color-muted);
+    font-family: var(--font-display);
+    font-size: 0.59375rem;
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+    transform: translateZ(14px);
+    transition: color 0.25s ease;
+  }
+
+  .tech-shadow {
+    position: absolute;
+    z-index: 0;
+    left: 50%;
+    bottom: 0;
+    width: 4.6rem;
+    height: 0.7rem;
+    border-radius: 999px;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--tech-color) 42%, transparent), transparent 78%);
+    filter: blur(6px);
+    opacity: 0.6;
+    transform: translateX(-50%);
+    transition:
+      opacity 0.3s ease,
+      transform 0.35s ease;
+  }
+
+  .tech-slot:hover .tech-tile {
+    border-color: color-mix(in srgb, var(--tech-color) 55%, transparent);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -14px 24px -18px rgba(0, 0, 0, 0.9),
+      0 26px 46px -20px color-mix(in srgb, var(--tech-color) 55%, transparent),
+      0 0 44px -10px color-mix(in srgb, var(--tech-color) 45%, transparent);
+  }
+
+  .tech-slot:hover .tech-tile-face {
+    transform: translateZ(30px) scale(1.05);
+  }
+
+  .tech-slot:hover .tech-name {
+    color: var(--color-foreground);
+  }
+
+  .tech-slot:hover .tech-shadow {
+    opacity: 0.28;
+    transform: translateX(-50%) scale(0.78);
+  }
+
+  /* Variante compacta (Sobre mí): mismo logo y efecto 3D, formato píldora */
+  .tech-pill-slot {
+    --tech-color: var(--color-primary);
+    perspective: 700px;
+  }
+
+  .tech-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--tech-color) 16%, rgba(255, 255, 255, 0.1));
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 10px 20px -16px rgba(0, 0, 0, 0.9);
+    color: var(--color-foreground);
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transform-style: preserve-3d;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .tech-pill-logo {
+    width: 1.2rem;
+    height: 1.2rem;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    transform: translateZ(10px);
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+  }
+
+  .tech-pill-name {
+    transform: translateZ(6px);
+  }
+
+  .tech-pill-slot:hover .tech-pill {
+    border-color: color-mix(in srgb, var(--tech-color) 52%, transparent);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      0 14px 26px -16px color-mix(in srgb, var(--tech-color) 55%, transparent),
+      0 0 28px -12px color-mix(in srgb, var(--tech-color) 45%, transparent);
+  }
+
+  @media (max-width: 480px) {
+    .tech-tile {
+      width: 5.9rem;
+      height: 5.9rem;
+    }
+
+    .tech-tile-face {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .tech-name {
+      font-size: 0.5625rem;
+      letter-spacing: 0.05em;
+    }
+
+    .tech-shadow {
+      width: 4.1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tech-float {
+      animation: none;
+    }
+  }
+
 }

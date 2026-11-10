@@ -26,12 +26,17 @@ export function Technologies() {
         {categories.map((group, groupIndex) => (
           <Reveal key={group.category} delay={groupIndex * 0.05}>
             <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-              <h3 className="w-44 shrink-0 font-display text-sm font-semibold uppercase tracking-[0.2em] text-muted">
+              <h3 className="w-auto shrink-0 pt-1 font-display text-sm font-semibold uppercase tracking-[0.2em] text-muted sm:w-56 sm:whitespace-nowrap">
                 {TECHNOLOGY_CATEGORY_LABELS[group.category] ?? group.category}
               </h3>
-              <div className="flex flex-wrap gap-2.5">
-                {group.items.map((tech) => (
-                  <TechnologyChip key={tech.id} name={tech.name} />
+              <div className="flex flex-wrap gap-x-3 gap-y-6 pt-2">
+                {group.items.map((tech, itemIndex) => (
+                  <TechnologyChip
+                    key={tech.id}
+                    name={tech.name}
+                    icon={tech.icon}
+                    index={groupIndex * 6 + itemIndex}
+                  />
                 ))}
               </div>
             </div>

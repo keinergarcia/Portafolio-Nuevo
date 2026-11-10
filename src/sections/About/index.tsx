@@ -139,7 +139,7 @@ export function About() {
               <p className="eyebrow mb-4">Áreas de especialización</p>
               <div className="flex flex-wrap gap-2.5">
                 {chipTechnologies.map((tech) => (
-                  <TechnologyChip key={tech} name={tech} />
+                  <TechnologyChip key={tech} name={tech} variant="pill" />
                 ))}
               </div>
             </div>
