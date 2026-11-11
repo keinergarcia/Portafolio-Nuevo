@@ -20,7 +20,7 @@ export function HeroScene() {
   const frameloop: Frameloop = restrictedMotion ? 'never' : 'always'
 
   return (
-    <div ref={ref} className="relative aspect-square w-full max-w-md" aria-hidden="true">
+    <div ref={ref} className="relative aspect-square w-full" aria-hidden="true">
       {ready && inView && !restrictedMotion ? (
         <Suspense fallback={<FallbackVisual active />}>
           <CoreScene frameloop={frameloop} />

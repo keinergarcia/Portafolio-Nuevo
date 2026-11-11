@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { ArrowRight, ChevronDown } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { HeroScene } from '@/components/three/HeroScene'
 import { ScrollParallax } from '@/components/animations/ScrollParallax'
@@ -9,6 +9,8 @@ const EASE = [0.22, 1, 0.36, 1] as const
 
 const DEFAULT_TAGLINE =
   'Creo soluciones digitales modernas mediante desarrollo web, aplicaciones de escritorio, automatización e inteligencia artificial.'
+
+const STACK = ['React', 'TypeScript', 'Node.js', 'Supabase', 'IA generativa']
 
 export function Hero() {
   const { profile, settings } = usePortfolioData()
@@ -23,10 +25,21 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden" aria-label="Presentación">
-      <div className="grid-glow pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div
+        className="grid-glow pointer-events-none absolute inset-0 opacity-70"
+        aria-hidden="true"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/4 -left-48 h-[34rem] w-[34rem] rounded-full bg-primary/[0.06] blur-[130px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/3 -right-56 h-[38rem] w-[38rem] rounded-full bg-secondary/[0.09] blur-[140px]"
+      />
 
-      <div className="shell relative flex min-h-[calc(100svh-4rem)] flex-col justify-center py-24 lg:flex-row lg:items-center lg:gap-16">
-        <div className="max-w-2xl lg:flex-1">
+      <div className="shell relative grid min-h-[calc(100svh-4.5rem)] items-center gap-10 py-12 sm:gap-12 sm:py-20 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-8 lg:py-24">
+        <div className="relative z-10 order-last max-w-[42rem] lg:order-none">
           <motion.p
             className="eyebrow"
             initial={{ opacity: 0, y: 16 }}
@@ -37,18 +50,17 @@ export function Hero() {
           </motion.p>
 
           <motion.h1
-            className="mt-6 font-display text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl xl:text-7xl"
+            className="mt-7 font-display text-[clamp(3.25rem,6.2vw,5.75rem)] leading-[0.95] font-bold tracking-[-0.035em]"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
           >
-            {firstName}
-            <br />
-            {lastName ? <span className="text-gradient">{lastName}</span> : <span className="text-gradient">{firstName}</span>}
+            <span className="block">{firstName}</span>
+            {lastName && <span className="text-gradient block">{lastName}</span>}
           </motion.h1>
 
           <motion.p
-            className="mt-6 font-display text-lg font-semibold uppercase tracking-[0.18em] text-muted sm:text-xl"
+            className="mt-7 font-display text-xl font-semibold tracking-tight text-foreground/90 sm:text-2xl"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
@@ -57,7 +69,7 @@ export function Hero() {
           </motion.p>
 
           <motion.p
-            className="mt-7 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
+            className="mt-5 max-w-xl text-base leading-relaxed text-pretty text-muted sm:text-lg"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3, ease: EASE }}
@@ -66,44 +78,83 @@ export function Hero() {
           </motion.p>
 
           <motion.div
-            className="mt-10 flex flex-wrap items-center gap-4"
+            className="mt-10 flex flex-wrap items-center gap-3"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4, ease: EASE }}
           >
-            <Button to="/projects" size="lg">
+            <Button to="/projects" size="lg" className="group">
               Ver proyectos
+              <ArrowRight
+                size={17}
+                className="transition-transform duration-300 group-hover:translate-x-0.5"
+              />
             </Button>
-            <Button to="/services" size="lg" variant="secondary">
+            <Button to="/contact" size="lg" variant="secondary">
+              Hablemos
+            </Button>
+            <Button
+              to="/services"
+              size="sm"
+              variant="ghost"
+              className="group text-muted"
+            >
               Mis servicios
+              <ArrowUpRight
+                size={15}
+                className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              />
             </Button>
-            <Button to="/contact" size="sm" variant="ghost" className="text-muted">
-              Contactar <ArrowRight size={14} />
-            </Button>
+          </motion.div>
+
+          <motion.div
+            className="mt-12 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-white/[0.07] pt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <span className="mr-1 font-mono text-[10px] tracking-[0.26em] text-white/35 uppercase">
+              Stack
+            </span>
+            {STACK.map((tech, index) => (
+              <span key={tech} className="flex items-center gap-3">
+                {index > 0 && (
+                  <span aria-hidden="true" className="h-1 w-1 rounded-full bg-primary/50" />
+                )}
+                <span className="font-mono text-xs text-muted/80">{tech}</span>
+              </span>
+            ))}
           </motion.div>
         </div>
 
-        <ScrollParallax className="mt-16 flex justify-center lg:mt-0 lg:flex-1" speed={0.12}>
-          <motion.div
-            className="w-full max-w-[15rem] opacity-90 sm:max-w-md sm:opacity-100"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
-          >
+        <motion.div
+          className="relative order-first mx-auto flex w-full max-w-[15rem] items-center justify-center sm:max-w-[26rem] lg:order-none lg:mx-0 lg:max-w-[30rem] xl:max-w-[34rem]"
+          initial={{ opacity: 0, scale: 0.94 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.25, ease: EASE }}
+        >
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+            <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.16),rgba(99,102,241,0.10)_45%,transparent_72%)] blur-2xl" />
+            <div className="absolute inset-[3%] rounded-full border border-white/[0.05]" />
+            <div className="absolute inset-[16%] rounded-full border border-dashed border-white/[0.05]" />
+          </div>
+
+          <ScrollParallax className="relative w-full" speed={0.12}>
             <HeroScene />
-          </motion.div>
-        </ScrollParallax>
+          </ScrollParallax>
+        </motion.div>
       </div>
 
       <motion.a
         href="#sobre-mi"
-        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-muted transition-colors hover:text-primary md:block"
+        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-muted/60 uppercase transition-colors hover:text-primary lg:flex"
         aria-label="Bajar a la sección siguiente"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.8 }}
       >
-        <ChevronDown size={22} className="animate-bounce" />
+        Explora
+        <ChevronDown size={18} className="animate-bounce text-primary/70" />
       </motion.a>
     </section>
   )

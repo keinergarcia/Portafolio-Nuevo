@@ -1,6 +1,8 @@
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import type {
   ContactMessage,
+  Document,
+  DocumentKind,
   Profile,
   Project,
   ProjectImage,
@@ -350,21 +352,42 @@ export async function upsertSetting(page: string, key: string, value: string) {
   if (error) throw new Error(error.message)
 }
 
+const PROFILE_FIELDS = [
+  'full_name',
+  'photo_url',
+  'professional_title',
+  'bio',
+  'formation',
+  'experience',
+  'location',
+  'email',
+  'phone',
+  'resume_url',
+] as const
+
+type ProfileUpdatePayload = Partial<{
+  full_name: string | null
+  photo_url: string | null
+  professional_title: string | null
+  bio: string | null
+  formation: string[] | null
+  experience: string[] | null
+  location: string | null
+  email: string | null
+  phone: string | null
+  resume_url: string | null
+}>
+
 export async function updateMyProfile(id: string, payload: Partial<Profile>) {
   const db = requireConfig()
-  const { error } = await db
-    .from('profiles')
-    .update({
-      full_name: payload.full_name ?? null,
-      professional_title: payload.professional_title ?? null,
-      bio: payload.bio ?? null,
-      photo_url: payload.photo_url ?? null,
-      location: payload.location ?? null,
-      email: payload.email ?? null,
-      phone: payload.phone ?? null,
-      resume_url: payload.resume_url ?? null,
-    })
-    .eq('id', id)
+  // Solo se envían los campos presentes: evita borrar datos no incluidos
+  // (por ejemplo, la foto al guardar desde el formulario de textos).
+  const updates: ProfileUpdatePayload = {}
+  for (const field of PROFILE_FIELDS) {
+    if (payload[field] !== undefined) updates[field] = payload[field] as never
+  }
+  if (Object.keys(updates).length === 0) return
+  const { error } = await db.from('profiles').update(updates).eq('id', id)
   if (error) throw new Error(error.message)
 }
 
@@ -388,4 +411,58 @@ export async function uploadPublicFile(
 export function buildStoragePath(prefix: string, fileName: string): string {
   const safeName = fileName.toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/-+/g, '-')
   return `${prefix}/${Date.now()}-${safeName}`
+}
+
+// ------------------------------------------------------------- documentos
+export interface DocumentPayload {
+  title: string
+  kind: DocumentKind
+  description: string | null
+  file_url: string
+  file_path: string
+  file_size: number | null
+  mime_type: string | null
+  sort_order: number
+  is_active: boolean
+}
+
+export async function fetchDocuments(): Promise<Document[]> {
+  const db = requireConfig()
+  const { data, error } = await db
+    .from('documents')
+    .select('*')
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: false })
+  if (error) throw new Error(error.message)
+  return (data ?? []) as unknown as Document[]
+}
+
+export async function createDocument(payload: DocumentPayload): Promise<Document> {
+  const db = requireConfig()
+  const { data, error } = await db
+    .from('documents')
+    .insert(payload)
+    .select('*')
+    .single()
+  if (error) throw new Error(error.message)
+  return data as unknown as Document
+}
+
+export async function updateDocument(
+  id: string,
+  payload: Partial<DocumentPayload>,
+): Promise<void> {
+  const db = requireConfig()
+  const { error } = await db.from('documents').update(payload).eq('id', id)
+  if (error) throw new Error(error.message)
+}
+
+export async function deleteDocument(document: Document): Promise<void> {
+  const db = requireConfig()
+  // Elimina primero el archivo del bucket (mejor esfuerzo) y luego la fila.
+  if (document.file_path) {
+    await db.storage.from('portfolio').remove([document.file_path])
+  }
+  const { error } = await db.from('documents').delete().eq('id', document.id)
+  if (error) throw new Error(error.message)
 }

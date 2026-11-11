@@ -9,7 +9,7 @@ import {
   fallbackSocialLinks,
   fallbackTechnologies,
 } from '@/lib/content'
-import type { Profile, Project, ServiceCategory, SocialLink, Technology } from '@/types'
+import type { Document, Profile, Project, ServiceCategory, SocialLink, Technology } from '@/types'
 
 function mergeProfile(remote: Profile | null): Profile {
   const fallback = fallbackProfile
@@ -36,6 +36,7 @@ interface PortfolioDataValue {
   projects: Project[]
   technologies: Technology[]
   socialLinks: SocialLink[]
+  documents: Document[]
   settings: Record<string, string>
   loading: boolean
 }
@@ -46,6 +47,7 @@ const EMPTY_VALUE: PortfolioDataValue = {
   projects: fallbackProjects,
   technologies: fallbackTechnologies,
   socialLinks: fallbackSocialLinks,
+  documents: [],
   settings: {},
   loading: true,
 }
@@ -73,6 +75,7 @@ export function PortfolioDataProvider({ children }: { children: ReactNode }) {
             remote.technologies.length > 0 ? remote.technologies : fallbackTechnologies,
           socialLinks:
             remote.socialLinks.length > 0 ? remote.socialLinks : fallbackSocialLinks,
+          documents: remote.documents,
           settings: remote.settings,
           loading: false,
         })

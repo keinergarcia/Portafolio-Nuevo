@@ -353,7 +353,7 @@ export default function CoreScene({ frameloop }: CoreSceneProps) {
   const logoDims = useMemo(() => {
     const img = logoTexture.image as HTMLImageElement | undefined
     const aspect = img?.width && img?.height ? img.width / img.height : 1
-    const height = 2.5
+    const height = 2.8
     return { width: height * aspect, height }
   }, [logoTexture])
 

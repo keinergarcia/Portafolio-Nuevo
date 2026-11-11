@@ -268,6 +268,40 @@ type SocialLinkInsert = {
 
 type SocialLinkUpdate = Partial<SocialLinkInsert>
 
+type DocumentRow = {
+  id: string
+  title: string
+  kind: string
+  description: string | null
+  file_url: string
+  file_path: string
+  file_size: number | null
+  mime_type: string | null
+  sort_order: number
+  is_active: boolean
+  downloads: number
+  created_at: string
+  updated_at: string
+}
+
+type DocumentInsert = {
+  id?: string
+  title: string
+  kind?: string
+  description?: string | null
+  file_url: string
+  file_path: string
+  file_size?: number | null
+  mime_type?: string | null
+  sort_order?: number
+  is_active?: boolean
+  downloads?: number
+  created_at?: string
+  updated_at?: string
+}
+
+type DocumentUpdate = Partial<DocumentInsert>
+
 export type Database = {
   public: {
     Tables: {
@@ -331,12 +365,21 @@ export type Database = {
         Update: SocialLinkUpdate
       Relationships: []
       }
+      documents: {
+        Row: DocumentRow
+        Insert: DocumentInsert
+        Update: DocumentUpdate
+      Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_document_download: {
+        Args: { doc_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

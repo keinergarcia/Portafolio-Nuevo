@@ -96,10 +96,10 @@ export function Contact() {
         description="Cuéntame qué necesitas y te propongo una solución. Respondo con la información correcta al primer mensaje."
       />
 
-      <div className="mt-14 grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
+      <div className="mt-16 grid grid-cols-1 gap-12 lg:grid-cols-[0.8fr_1.2fr]">
         <Reveal>
           <div className="space-y-6">
-            <p className="text-sm leading-relaxed text-muted">
+            <p className="text-base leading-relaxed text-muted">
               ¿Tienes una idea, necesitas un sistema, una web o una automatización?
               Escríbeme directamente por cualquiera de estos canales.
             </p>
@@ -108,20 +108,27 @@ export function Contact() {
               {channels.map((channel) => {
                 const isPlaceholder = channel.value === 'TODO'
                 const content = (
-                  <span className="glass flex items-center gap-4 px-5 py-4 transition-colors hover:border-white/15">
+                  <span className="glass group flex items-center gap-4 px-5 py-4 transition-colors hover:border-white/15">
                     <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-tertiary/20 text-primary">
                       <channel.icon size={19} aria-hidden="true" />
                     </span>
-                    <span className="min-w-0">
-                      <span className="block text-sm font-semibold capitalize text-foreground">
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[11px] font-semibold tracking-[0.16em] text-muted uppercase">
                         {channel.label}
                       </span>
-                      <span className="block truncate font-mono text-xs text-muted">
+                      <span className="mt-1 block truncate text-sm text-foreground/90">
                         {isPlaceholder
                           ? '¿Disponible próximamente?'
                           : channel.value}
                       </span>
                     </span>
+                    {!isPlaceholder && (
+                      <ArrowRight
+                        size={16}
+                        aria-hidden="true"
+                        className="shrink-0 text-muted transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-primary"
+                      />
+                    )}
                   </span>
                 )
                 return (
@@ -148,7 +155,7 @@ export function Contact() {
         <Reveal delay={0.1}>
           <form
             onSubmit={onSubmit}
-            className="glass relative space-y-5 p-6 sm:p-8"
+            className="glass relative space-y-5 p-7 sm:p-9"
             noValidate
           >
             <span

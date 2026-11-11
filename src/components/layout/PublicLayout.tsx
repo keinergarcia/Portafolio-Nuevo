@@ -54,7 +54,7 @@ export function PublicLayout() {
           Saltar al contenido
         </a>
 
-        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.06] bg-background/70 backdrop-blur-xl">
+        <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[0.07] bg-background/65 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55">
           <Navbar onOpenMenu={() => setMenuOpen(true)} />
           <motion.div
             aria-hidden="true"
@@ -65,7 +65,7 @@ export function PublicLayout() {
 
         <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
 
-        <main id="main-content" className="relative z-10 flex-1 pt-16">
+        <main id="main-content" className="relative z-10 flex-1 pt-[4.5rem]">
           <Outlet />
         </main>
 

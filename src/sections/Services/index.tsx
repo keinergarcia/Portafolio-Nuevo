@@ -19,15 +19,15 @@ export function Services() {
           description="Del desarrollo web al software de escritorio, con automatización e IA aplicada a procesos reales."
         />
 
-        <Stagger className="mt-14 grid gap-6 md:grid-cols-2" gap={0.12}>
-          {serviceCategories.map((category) => (
-            <StaggerItem key={category.id}>
-              <ServiceCategoryCard category={category} />
+        <Stagger className="mt-16 grid gap-6 md:grid-cols-2" gap={0.12}>
+          {serviceCategories.map((category, index) => (
+            <StaggerItem key={category.id} className="h-full">
+              <ServiceCategoryCard category={category} index={index} />
             </StaggerItem>
           ))}
         </Stagger>
 
-        <div className="glass mt-8 flex items-start gap-4 p-6">
+        <div className="glass mt-8 flex items-start gap-4 p-6 sm:p-7">
           <ShieldCheck size={20} className="mt-0.5 shrink-0 text-primary" aria-hidden="true" />
           <p className="text-sm leading-relaxed text-muted">
             Para software comercial siempre se utiliza una licencia legítima. Cuando

@@ -3,6 +3,7 @@ import { Navigate, createBrowserRouter } from 'react-router'
 import { PublicLayout } from '@/components/layout/PublicLayout'
 import { AdminLayout } from '@/components/layout/AdminLayout'
 import { Home } from '@/pages/Home'
+import { ProfilePage } from '@/pages/Profile'
 import { Projects } from '@/pages/Projects'
 import { ProjectDetail } from '@/pages/ProjectDetail'
 import { Services } from '@/pages/Services'
@@ -31,6 +32,12 @@ const Technologies = lazy(() =>
 const AdminSocial = lazy(() =>
   import('@/pages/admin/Social').then((m) => ({ default: m.Social })),
 )
+const DocumentsAdmin = lazy(() =>
+  import('@/pages/admin/Documents').then((m) => ({ default: m.DocumentsAdmin })),
+)
+const ProfileAdmin = lazy(() =>
+  import('@/pages/admin/Profile').then((m) => ({ default: m.ProfileAdmin })),
+)
 const Messages = lazy(() =>
   import('@/pages/admin/Messages').then((m) => ({ default: m.Messages })),
 )
@@ -57,6 +64,7 @@ export const router = createBrowserRouter([
     element: <PublicLayout />,
     children: [
       { index: true, element: <Home /> },
+      { path: 'perfil', element: <ProfilePage /> },
       { path: 'projects', element: <Projects /> },
       { path: 'project/:slug', element: <ProjectDetail /> },
       { path: 'services', element: <Services /> },
@@ -76,6 +84,8 @@ export const router = createBrowserRouter([
       { path: 'services', element: <AdminRoute><AdminServices /></AdminRoute> },
       { path: 'technologies', element: <AdminRoute><Technologies /></AdminRoute> },
       { path: 'social', element: <AdminRoute><AdminSocial /></AdminRoute> },
+      { path: 'documents', element: <AdminRoute><DocumentsAdmin /></AdminRoute> },
+      { path: 'profile', element: <AdminRoute><ProfileAdmin /></AdminRoute> },
       { path: 'messages', element: <AdminRoute><Messages /></AdminRoute> },
       { path: 'settings', element: <AdminRoute><AdminSettings /></AdminRoute> },
     ],
@@ -87,6 +97,7 @@ export {
   PublicLayout,
   AdminLayout,
   Home,
+  ProfilePage,
   Projects,
   ProjectDetail,
   Services,

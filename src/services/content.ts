@@ -1,5 +1,6 @@
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import type {
+  Document,
   Profile,
   Project,
   ProjectImage,
@@ -16,6 +17,7 @@ export interface PortfolioData {
   projects: Project[]
   technologies: Technology[]
   socialLinks: SocialLink[]
+  documents: Document[]
   settings: Record<string, string>
 }
 
@@ -25,6 +27,7 @@ const EMPTY: PortfolioData = {
   projects: [],
   technologies: [],
   socialLinks: [],
+  documents: [],
   settings: {},
 }
 
@@ -34,7 +37,7 @@ type TechnologyRow = Technology
 export async function fetchPortfolioData(): Promise<PortfolioData> {
   if (!isSupabaseConfigured()) return EMPTY
 
-  const [profileRes, categoriesRes, servicesRes, projectsRes, imagesRes, projectTechRes, techsRes, socialRes, settingsRes] =
+  const [profileRes, categoriesRes, servicesRes, projectsRes, imagesRes, projectTechRes, techsRes, socialRes, documentsRes, settingsRes] =
     await Promise.all([
       supabase.from('profiles').select('*').limit(1).maybeSingle(),
       supabase.from('service_categories').select('*').order('sort_order', { ascending: true }),
@@ -44,6 +47,7 @@ export async function fetchPortfolioData(): Promise<PortfolioData> {
       supabase.from('project_technologies').select('*'),
       supabase.from('technologies').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
       supabase.from('social_links').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
+      supabase.from('documents').select('*').eq('is_active', true).order('sort_order', { ascending: true }),
       supabase.from('site_settings').select('*'),
     ])
 
@@ -65,6 +69,9 @@ export async function fetchPortfolioData(): Promise<PortfolioData> {
   const socialLinks = socialRes.error
     ? []
     : ((socialRes.data ?? []) as unknown as SocialLink[])
+  const documents = documentsRes.error
+    ? []
+    : ((documentsRes.data ?? []) as unknown as Document[])
   const settingsRows = settingsRes.error ? [] : ((settingsRes.data ?? []) as unknown as SiteSetting[])
 
   const technologyById = new Map(technologies.map((tech) => [tech.id, tech]))
@@ -99,6 +106,7 @@ export async function fetchPortfolioData(): Promise<PortfolioData> {
     projects: projectsWithRelations,
     technologies,
     socialLinks,
+    documents,
     settings,
   }
 }

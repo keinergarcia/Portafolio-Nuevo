@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, Navigate, Outlet, useLocation } from 'react-router'
 import {
+  FileDown,
   FolderKanban,
   LayoutDashboard,
   LogOut,
@@ -10,6 +11,7 @@ import {
   Settings,
   Sparkles,
   Tags,
+  UserRound,
   X,
 } from 'lucide-react'
 import { useAdminAuth } from '@/contexts/AdminAuth'
@@ -22,6 +24,8 @@ const NAV_ITEMS = [
   { to: '/admin/services', label: 'Servicios', icon: Sparkles },
   { to: '/admin/technologies', label: 'Tecnologías', icon: Tags },
   { to: '/admin/social', label: 'Enlaces sociales', icon: MessagesSquare },
+  { to: '/admin/documents', label: 'Documentos', icon: FileDown },
+  { to: '/admin/profile', label: 'Mi perfil', icon: UserRound },
   { to: '/admin/messages', label: 'Mensajes', icon: Mail },
   { to: '/admin/settings', label: 'Ajustes', icon: Settings },
 ]
@@ -89,6 +93,8 @@ export function AdminLayout() {
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const isLoginRoute = location.pathname === '/admin/login'
+
   if (loading) {
     return (
       <div className="flex min-h-svh items-center justify-center bg-background text-primary">
@@ -97,15 +103,24 @@ export function AdminLayout() {
     )
   }
 
-  if (!user) {
+  // En la propia ruta de login no se redirige: evita un bucle de navegación.
+  if (!user && !isLoginRoute) {
     return <Navigate to="/admin/login" replace state={{ from: location.pathname }} />
   }
 
-  const isLoginRoute = location.pathname === '/admin/login'
+  // El login se muestra a pantalla completa, sin navegación lateral.
+  if (isLoginRoute) {
+    return (
+      <div className="min-h-svh bg-background text-foreground">
+        <main className="flex-1">
+          <Outlet />
+        </main>
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-svh bg-background text-foreground">
-      <div className="flex min-h-svh">
+    <div className="min-h-svh bg-background text-foreground">      <div className="flex min-h-svh">
         <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 border-r border-white/[0.06] bg-surface/50 backdrop-blur-xl lg:block">
           <SidebarContent />
         </aside>

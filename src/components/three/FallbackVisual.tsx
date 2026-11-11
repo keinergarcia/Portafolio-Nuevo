@@ -7,7 +7,7 @@ interface FallbackVisualProps {
 export function FallbackVisual({ active = false }: FallbackVisualProps) {
   return (
     <div
-      className={`relative aspect-square w-full max-w-md ${active ? '' : 'animate-float'}`}
+      className={`relative aspect-square w-full ${active ? '' : 'animate-float'}`}
       aria-hidden="true"
     >
       <img

@@ -7,7 +7,6 @@ import { getAdminStats, fetchMessages, type AdminStats } from '@/services/supaba
 import type { ContactMessage } from '@/types'
 import { AdminHeader } from '../parts/AdminHeader'
 import { MessageRow } from '../parts/MessageRow'
-import { Badge } from '@/components/ui/Badge'
 import { Spinner } from '@/components/ui/Spinner'
 
 export function Dashboard() {
@@ -103,10 +102,6 @@ export function Dashboard() {
             ))}
           </ul>
         )}
-      </div>
-
-      <div className="mt-10 flex flex-wrap gap-3">
-        <Badge variant="outline">Fase 7 · Panel CMS</Badge>
       </div>
     </div>
   )

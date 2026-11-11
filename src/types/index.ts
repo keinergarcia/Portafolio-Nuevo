@@ -135,3 +135,21 @@ export interface SiteSetting {
   value: Record<string, unknown> | string | number | boolean | null
   updated_at: string
 }
+
+export type DocumentKind = 'cv' | 'title' | 'certificate' | 'other' | string
+
+export interface Document {
+  id: string
+  title: string
+  kind: DocumentKind
+  description: string | null
+  file_url: string
+  file_path: string
+  file_size: number | null
+  mime_type: string | null
+  sort_order: number
+  is_active: boolean
+  downloads: number
+  created_at: string
+  updated_at: string
+}

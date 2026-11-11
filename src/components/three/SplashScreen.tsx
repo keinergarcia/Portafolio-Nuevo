@@ -1124,7 +1124,6 @@ function SplashScene({
 export function SplashScreen() {
   const { done, finish } = useIntro()
   const [hide, setHide] = useState(false)
-  const [bootGone, setBootGone] = useState(false)
   const cfg = useIntroConfig()
 
   useEffect(() => {
@@ -1136,15 +1135,23 @@ export function SplashScreen() {
     }
   }, [finish])
 
+  /* La capa negra inline de index.html (#boot-splash) se retira recién cuando
+     el overlay de React ya está montado y pintado, siempre opaco. Así nunca
+     queda un frame mostrando la página entre el arranque y la animación. */
   useEffect(() => {
-    const boot = window.setTimeout(() => {
-      document.getElementById('boot-splash')?.remove()
-      setBootGone(true)
-    }, 600)
+    let firstFrame = 0
+    let secondFrame = 0
+    firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        document.getElementById('boot-splash')?.remove()
+      })
+    })
+    const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
-      window.clearTimeout(boot)
-      document.body.style.overflow = ''
+      cancelAnimationFrame(firstFrame)
+      cancelAnimationFrame(secondFrame)
+      document.body.style.overflow = previousOverflow
     }
   }, [])
 
@@ -1153,10 +1160,10 @@ export function SplashScreen() {
   return (
     <motion.div
       className="fixed inset-0 z-[200] flex items-center justify-center bg-black"
-      style={{ pointerEvents: hide || !bootGone ? 'none' : 'auto' }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: bootGone ? (hide ? 0 : 1) : 0 }}
-      transition={{ duration: hide ? FADE_MS / 1000 : 0.45, ease: hide ? 'easeInOut' : 'easeOut' }}
+      style={{ pointerEvents: hide ? 'none' : 'auto' }}
+      initial={{ opacity: 1 }}
+      animate={{ opacity: hide ? 0 : 1 }}
+      transition={{ duration: hide ? FADE_MS / 1000 : 0, ease: 'easeInOut' }}
     >
       <div aria-hidden="true" className="absolute inset-0">
         <Canvas
