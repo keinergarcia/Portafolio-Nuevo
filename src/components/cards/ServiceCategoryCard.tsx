@@ -1,5 +1,6 @@
 import { Check, Bot, Globe, Monitor, Wrench, type LucideIcon } from 'lucide-react'
 import type { ServiceCategory } from '@/types'
+import { formatCOP, type PricingFrom } from '@/lib/pricing'
 import { cn } from '@/lib/utils'
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -12,9 +13,14 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
 interface ServiceCategoryCardProps {
   category: ServiceCategory
   index?: number
+  priceFrom?: PricingFrom
 }
 
-export function ServiceCategoryCard({ category, index }: ServiceCategoryCardProps) {
+export function ServiceCategoryCard({
+  category,
+  index,
+  priceFrom,
+}: ServiceCategoryCardProps) {
   const Icon = CATEGORY_ICONS[category.icon ?? ''] ?? Globe
 
   return (
@@ -51,6 +57,20 @@ export function ServiceCategoryCard({ category, index }: ServiceCategoryCardProp
       <p className="relative mt-3 max-w-md text-sm leading-relaxed text-muted">
         {category.description}
       </p>
+
+      {priceFrom && (
+        <div className="relative mt-5 inline-flex w-fit items-baseline gap-2 rounded-full border border-primary/20 bg-primary/[0.06] px-3 py-1.5">
+          <span className="font-mono text-[10px] tracking-[0.16em] text-primary/80 uppercase">
+            Desde
+          </span>
+          <span className="font-display text-sm font-semibold text-foreground">
+            {formatCOP(priceFrom.amount)}
+          </span>
+          <span className="font-mono text-[10px] text-muted">
+            {priceFrom.unit ? `COP/${priceFrom.unit}` : 'COP'}
+          </span>
+        </div>
+      )}
 
       <ul className="relative mt-7 space-y-3 border-t border-white/[0.06] pt-6">
         {category.services?.map((service) => (

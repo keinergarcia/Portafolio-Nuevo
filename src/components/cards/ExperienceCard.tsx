@@ -1,6 +1,7 @@
 import { ArrowUpRight, CheckCircle2 } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { cn } from '@/lib/utils'
+import { resolveTechnologyLogo } from '@/lib/technology-logos'
 import type { WorkExperience } from '@/lib/experience'
 
 export function ExperienceCard({
@@ -73,15 +74,22 @@ export function ExperienceCard({
           Tecnologías
         </p>
         <ul className="mt-3 flex flex-wrap gap-2">
-          {job.technologies.map((technology) => (
-            <li
-              key={technology}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 font-mono text-[11px] text-muted"
-            >
-              <span aria-hidden="true" className="h-1 w-1 rounded-full bg-primary" />
-              {technology}
-            </li>
-          ))}
+          {job.technologies.map((technology) => {
+            const logo = resolveTechnologyLogo({ name: technology })
+            return (
+              <li
+                key={technology}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 font-mono text-[11px] text-muted"
+              >
+                {logo ? (
+                  <img src={logo.src} alt="" className="h-3.5 w-3.5 shrink-0 object-contain" />
+                ) : (
+                  <span aria-hidden="true" className="h-1 w-1 rounded-full bg-primary" />
+                )}
+                {technology}
+              </li>
+            )
+          })}
         </ul>
       </div>
     </article>

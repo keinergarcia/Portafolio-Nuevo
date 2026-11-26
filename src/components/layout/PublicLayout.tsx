@@ -7,11 +7,15 @@ import { Footer } from '@/components/navigation/Footer'
 import { FxPanel } from '@/components/effects/FxPanel'
 import { IntroProvider } from '@/contexts/Intro'
 import { EffectsProvider } from '@/contexts/Effects'
-import { SplashScreen } from '@/components/three/SplashScreen'
-
 const GlobalBackground = lazy(() =>
   import('@/components/three/background/GlobalBackground').then((m) => ({
     default: m.GlobalBackground,
+  })),
+)
+
+const SplashScreen = lazy(() =>
+  import('@/components/three/SplashScreen').then((m) => ({
+    default: m.SplashScreen,
   })),
 )
 
@@ -73,7 +77,9 @@ export function PublicLayout() {
           <Footer />
         </div>
         </div>
-        <SplashScreen />
+        <Suspense fallback={null}>
+          <SplashScreen />
+        </Suspense>
         <FxPanel />
       </EffectsProvider>
     </IntroProvider>

@@ -11,9 +11,10 @@ interface ModalProps {
   title: string
   children: ReactNode
   className?: string
+  size?: 'md' | 'lg'
 }
 
-export function Modal({ open, onClose, title, children, className }: ModalProps) {
+export function Modal({ open, onClose, title, children, className, size = 'md' }: ModalProps) {
   useEffect(() => {
     if (!open) return
     const onKey = (event: KeyboardEvent) => {
@@ -42,7 +43,8 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
         >
           <motion.div
             className={cn(
-              'my-8 w-full max-w-lg rounded-2xl border border-white/10 bg-surface p-6 shadow-2xl',
+              'my-8 w-full rounded-2xl border border-white/10 bg-surface p-6 shadow-2xl',
+              size === 'lg' ? 'max-w-3xl' : 'max-w-lg',
               className,
             )}
             initial={{ opacity: 0, scale: 0.96, y: 12 }}

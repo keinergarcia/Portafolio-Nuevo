@@ -1,5 +1,6 @@
-import { useState, type ComponentType } from 'react'
+import { useEffect, useState, type ComponentType } from 'react'
 import { useForm } from 'react-hook-form'
+import { useLocation, useNavigate } from 'react-router'
 import { z } from 'zod'
 import {
   ArrowRight,
@@ -58,16 +59,42 @@ function buildChannels(profile: Profile, links: SocialLink[]): Channel[] {
 
 export function Contact() {
   const { profile, socialLinks, serviceCategories } = usePortfolioData()
+  const location = useLocation()
+  const navigate = useNavigate()
+  const quoteState = location.state as
+    | { quoteMessage?: string; serviceType?: string }
+    | null
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
+  const [quoteLoaded, setQuoteLoaded] = useState(Boolean(quoteState?.quoteMessage))
   const channels = buildChannels(profile, socialLinks)
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     setError,
     formState: { errors },
   } = useForm<ContactFormValues>({ mode: 'onBlur' })
+
+  useEffect(() => {
+    if (!quoteState?.quoteMessage) return
+    setValue('message', quoteState.quoteMessage, { shouldDirty: true })
+    setValue(
+      'service_type',
+      quoteState.serviceType ?? 'Cotización personalizada',
+      { shouldDirty: true },
+    )
+    window.requestAnimationFrame(() => {
+      const field = document.getElementById(
+        'contact-message',
+      ) as HTMLTextAreaElement | null
+      if (!field) return
+      field.scrollTop = 0
+      field.setSelectionRange(0, 0)
+    })
+    navigate(location.pathname, { replace: true, state: null })
+  }, [location.pathname, navigate, quoteState, setValue])
 
   const onSubmit = handleSubmit(async (values) => {
     setStatus('sending')
@@ -81,6 +108,7 @@ export function Contact() {
       })
       setStatus('success')
       reset()
+      setQuoteLoaded(false)
     } catch (error) {
       setStatus('error')
       setError('name', { message: error instanceof Error ? error.message : '' })
@@ -163,6 +191,17 @@ export function Contact() {
               className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"
             />
 
+            {quoteLoaded && status === 'idle' && (
+              <div
+                role="status"
+                className="flex items-start gap-3 rounded-xl border border-primary/25 bg-primary/[0.07] px-4 py-3 text-sm text-primary"
+              >
+                <CheckCircle2 size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
+                Cargamos los servicios que seleccionaste. Revisa el resumen y
+                completa tus datos para enviarlo.
+              </div>
+            )}
+
             {status === 'success' && (
               <div
                 role="status"
@@ -226,6 +265,9 @@ export function Contact() {
                   <option value="" disabled>
                     Selecciona una opción
                   </option>
+                  <option value="Cotización personalizada">
+                    Cotización personalizada
+                  </option>
                   {serviceCategories.map((category) => (
                     <option key={category.id} value={category.name}>
                       {category.name}
@@ -238,6 +280,7 @@ export function Contact() {
             <Field label="Mensaje" htmlFor="contact-message" required error={errors.message?.message}>
               <Textarea
                 id="contact-message"
+                rows={8}
                 placeholder="Cuéntame sobre tu proyecto, objetivo y plazos…"
                 {...register('message')}
               />

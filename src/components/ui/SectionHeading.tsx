@@ -8,6 +8,7 @@ interface SectionHeadingProps {
   description?: string
   align?: 'left' | 'center'
   className?: string
+  reveal?: boolean
 }
 
 export function SectionHeading({
@@ -17,15 +18,16 @@ export function SectionHeading({
   description,
   align = 'left',
   className,
+  reveal = true,
 }: SectionHeadingProps) {
-  return (
-    <Reveal
-      className={cn(
-        'max-w-3xl',
-        align === 'center' && 'mx-auto flex flex-col items-center text-center',
-        className,
-      )}
-    >
+  const classes = cn(
+    'max-w-3xl',
+    align === 'center' && 'mx-auto flex flex-col items-center text-center',
+    className,
+  )
+
+  const content = (
+    <>
       {eyebrow && <p className="eyebrow">{eyebrow}</p>}
       <h2 className="mt-5 font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.025em] text-balance text-foreground sm:text-4xl lg:text-[2.9rem]">
         {title}
@@ -36,6 +38,10 @@ export function SectionHeading({
           {description}
         </p>
       )}
-    </Reveal>
+    </>
   )
+
+  if (!reveal) return <div className={classes}>{content}</div>
+
+  return <Reveal className={classes}>{content}</Reveal>
 }

@@ -1,3 +1,4 @@
+/* oxlint-disable react/only-export-components -- archivo de rutas: exporta el router, no componentes */
 import { Suspense, lazy } from 'react'
 import { Navigate, createBrowserRouter } from 'react-router'
 import { PublicLayout } from '@/components/layout/PublicLayout'
@@ -92,15 +93,3 @@ export const router = createBrowserRouter([
   },
   { path: '*', element: <NotFound /> },
 ])
-
-export {
-  PublicLayout,
-  AdminLayout,
-  Home,
-  ProfilePage,
-  Projects,
-  ProjectDetail,
-  Services,
-  Contact,
-  NotFound,
-}

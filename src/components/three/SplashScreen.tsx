@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import * as THREE from 'three'
 import { SPACE_CONFIG, useSpaceTier } from '@/components/three/background/useSpaceTier'
 import { useIntro } from '@/contexts/Intro'
-import logoUrl from '@/assets/logo-elchivalez.png'
+import logoUrl from '@/assets/logo-elchivalez.webp'
 
 const SPLASH_MS = 5200
 const FADE_MS = 740
@@ -1139,6 +1139,10 @@ export function SplashScreen() {
      el overlay de React ya está montado y pintado, siempre opaco. Así nunca
      queda un frame mostrando la página entre el arranque y la animación. */
   useEffect(() => {
+    if (done) {
+      document.body.style.overflow = ''
+      return
+    }
     let firstFrame = 0
     let secondFrame = 0
     firstFrame = requestAnimationFrame(() => {
@@ -1146,14 +1150,13 @@ export function SplashScreen() {
         document.getElementById('boot-splash')?.remove()
       })
     })
-    const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
       cancelAnimationFrame(firstFrame)
       cancelAnimationFrame(secondFrame)
-      document.body.style.overflow = previousOverflow
+      document.body.style.overflow = ''
     }
-  }, [])
+  }, [done])
 
   if (done) return null
 

@@ -23,6 +23,7 @@ import { Field, Input, Select, Textarea } from '@/components/ui/Field'
 import { Button } from '@/components/ui/Button'
 import { Spinner } from '@/components/ui/Spinner'
 import { cn } from '@/lib/utils'
+import { resolveTechnologyLogo } from '@/lib/technology-logos'
 
 const projectSchema = z.object({
   title: z.string().trim().min(3, 'El título es obligatorio'),
@@ -413,18 +414,26 @@ export function ProjectForm() {
                 <div className="flex flex-wrap gap-2">
                   {technologies.map((technology) => {
                     const checked = selectedTechIds.includes(technology.id)
+                    const logo = resolveTechnologyLogo({ name: technology.name, icon: technology.icon })
                     return (
                       <button
                         type="button"
                         key={technology.id}
                         onClick={() => toggleTechnology(technology.id)}
                         className={cn(
-                          'rounded-xl border px-3 py-1.5 text-sm font-medium transition',
+                          'inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm font-medium transition',
                           checked
                             ? 'border-primary/40 bg-primary/15 text-primary'
                             : 'border-white/10 text-muted hover:border-white/25 hover:text-foreground',
                         )}
                       >
+                        {logo ? (
+                          <img src={logo.src} alt="" className="h-4 w-4 shrink-0 object-contain" />
+                        ) : (
+                          <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded bg-white/10 font-mono text-[10px] uppercase">
+                            {technology.name.slice(0, 1)}
+                          </span>
+                        )}
                         {technology.name}
                       </button>
                     )

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { ShieldCheck } from 'lucide-react'
 import { AutomationFlow } from '@/sections/Automation'
 import { usePortfolioData } from '@/contexts/PortfolioData'
+import { PRICING_FROM_BY_CATEGORY } from '@/lib/pricing'
 
 export function Services() {
   const { serviceCategories } = usePortfolioData()
@@ -16,13 +17,17 @@ export function Services() {
           eyebrow="Servicios"
           title="Soluciones digitales"
           highlight="a tu medida"
-          description="Del desarrollo web al software de escritorio, con automatización e IA aplicada a procesos reales."
+          description="Del desarrollo web al software de escritorio, con automatización e IA aplicada a procesos reales. Precios claros desde el primer contacto."
         />
 
         <Stagger className="mt-16 grid gap-6 md:grid-cols-2" gap={0.12}>
           {serviceCategories.map((category, index) => (
             <StaggerItem key={category.id} className="h-full">
-              <ServiceCategoryCard category={category} index={index} />
+              <ServiceCategoryCard
+                category={category}
+                index={index}
+                priceFrom={PRICING_FROM_BY_CATEGORY[category.slug]}
+              />
             </StaggerItem>
           ))}
         </Stagger>
@@ -38,7 +43,7 @@ export function Services() {
 
         <div className="mt-12 text-center">
           <Button to="/services" variant="secondary" size="lg">
-            Ver todos los servicios
+            Ver servicios y precios
           </Button>
         </div>
       </div>

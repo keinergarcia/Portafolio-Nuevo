@@ -47,7 +47,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-5 text-sm leading-relaxed text-muted">
-              Desarrollador y Analista de Software. Soluciones digitales para personas,
+              Desarrollador de Software. Soluciones digitales para personas,
               emprendimientos y empresas.
             </p>
           </div>

@@ -1,0 +1,49 @@
+diff --git a/node_modules/@react-three/drei/web/Html.js b/node_modules/@react-three/drei/web/Html.js
+index 81d68b7..cd97efc 100644
+--- a/node_modules/@react-three/drei/web/Html.js
++++ b/node_modules/@react-three/drei/web/Html.js
+@@ -114,6 +114,7 @@ const Html = /* @__PURE__ */React.forwardRef(({
+   } = useThree();
+   const [el] = React.useState(() => document.createElement(as));
+   const root = React.useRef(null);
++  const pendingCleanup = React.useRef(null);
+   const group = React.useRef(null);
+   const oldZoom = React.useRef(0);
+   const oldPosition = React.useRef([0, 0]);
+@@ -140,7 +141,13 @@ const Html = /* @__PURE__ */React.forwardRef(({
+   }, [occlude]);
+   React.useLayoutEffect(() => {
+     if (group.current) {
+-      const currentRoot = root.current = ReactDOM.createRoot(el);
++      if (pendingCleanup.current) {
++        clearTimeout(pendingCleanup.current);
++        pendingCleanup.current = null;
++      } else {
++        root.current = ReactDOM.createRoot(el);
++      }
++      const currentRoot = root.current;
+       scene.updateMatrixWorld();
+       if (transform) {
+         el.style.cssText = `position:absolute;top:0;left:0;pointer-events:none;overflow:hidden;`;
+@@ -148,12 +155,18 @@ const Html = /* @__PURE__ */React.forwardRef(({
+         const vec = calculatePosition(group.current, camera, size);
+         el.style.cssText = `position:absolute;top:0;left:0;transform:translate3d(${vec[0]}px,${vec[1]}px,0);transform-origin:0 0;`;
+       }
+-      if (target) {
++      if (target && el.parentNode !== target) {
+         if (prepend) target.prepend(el);else target.appendChild(el);
+       }
+       return () => {
+-        if (target) target.removeChild(el);
+-        currentRoot.unmount();
++        const parent = target;
++        const child = el;
++        const rootToUnmount = currentRoot;
++        pendingCleanup.current = setTimeout(() => {
++          pendingCleanup.current = null;
++          if (parent && child.parentNode === parent) parent.removeChild(child);
++          rootToUnmount.unmount();
++        }, 0);
+       };
+     }
+   }, [target, transform]);

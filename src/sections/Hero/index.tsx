@@ -1,14 +1,18 @@
+import { lazy, Suspense } from 'react'
 import { motion } from 'motion/react'
 import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { HeroScene } from '@/components/three/HeroScene'
 import { ScrollParallax } from '@/components/animations/ScrollParallax'
 import { usePortfolioData } from '@/contexts/PortfolioData'
+
+const HeroScene = lazy(() =>
+  import('@/components/three/HeroScene').then((m) => ({ default: m.HeroScene })),
+)
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
 const DEFAULT_TAGLINE =
-  'Creo soluciones digitales modernas mediante desarrollo web, aplicaciones de escritorio, automatización e inteligencia artificial.'
+  'Desarrollador de Software con experiencia en Android, POS bancarios y desarrollo web moderno. Creo soluciones digitales a medida.'
 
 const STACK = ['React', 'TypeScript', 'Node.js', 'Supabase', 'IA generativa']
 
@@ -20,7 +24,7 @@ export function Hero() {
   const [firstName, ...restParts] = fullName.trim().split(/\s+/)
   const lastName = restParts.join(' ')
   const title =
-    settings['home.hero_title'] ?? profile.professional_title ?? 'Desarrollador y Analista de Software'
+    settings['home.hero_title'] ?? profile.professional_title ?? 'Desarrollador de Software'
   const tagline = settings['home.hero_tagline'] ?? profile.bio ?? DEFAULT_TAGLINE
 
   return (
@@ -140,7 +144,9 @@ export function Hero() {
           </div>
 
           <ScrollParallax className="relative w-full" speed={0.12}>
-            <HeroScene />
+            <Suspense fallback={null}>
+              <HeroScene />
+            </Suspense>
           </ScrollParallax>
         </motion.div>
       </div>

@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react'
 import type { Project } from '@/types'
 import { Badge } from '@/components/ui/Badge'
 import { cn } from '@/lib/utils'
+import { resolveTechnologyLogo } from '@/lib/technology-logos'
 
 interface ProjectCardProps {
   project: Project
@@ -90,11 +91,15 @@ export function ProjectCard({ project, priority = false, featured = false }: Pro
 
           {project.technologies && project.technologies.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-2">
-              {project.technologies.map((tech) => (
-                <Badge key={tech.id} className="font-mono text-[11px]">
-                  {tech.name}
-                </Badge>
-              ))}
+              {project.technologies.map((tech) => {
+                const logo = resolveTechnologyLogo({ name: tech.name, icon: tech.icon })
+                return (
+                  <Badge key={tech.id} className="font-mono text-[11px]">
+                    {logo && <img src={logo.src} alt="" className="h-3.5 w-3.5 shrink-0 object-contain" />}
+                    {tech.name}
+                  </Badge>
+                )
+              })}
             </div>
           )}
 

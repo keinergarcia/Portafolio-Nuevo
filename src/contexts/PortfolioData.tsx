@@ -1,4 +1,4 @@
-/* oxlint-disable react/set-state-in-effect -- carga asíncrona inicial de contenido (sistema externo) */
+/* oxlint-disable react/set-state-in-effect, react/only-export-components -- carga asíncrona inicial de contenido (sistema externo); patrón provider+hook */
 import { createContext, useContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { fetchPortfolioData } from '@/services/content'

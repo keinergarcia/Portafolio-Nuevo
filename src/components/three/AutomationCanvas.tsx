@@ -69,12 +69,12 @@ export function AutomationCanvas({ className }: { className?: string }) {
     return () => document.removeEventListener('visibilitychange', onVisibilityChange)
   }, [])
 
-  const frameloop: 'always' | 'never' = restrictedMotion || hidden ? 'never' : 'always'
+  const frameloop: 'always' | 'never' = restrictedMotion || hidden || !inView ? 'never' : 'always'
 
   return (
     <div ref={ref} className={className} aria-hidden="true">
       <div ref={containerRef} className="absolute inset-0">
-        {webgl && ready && inView ? (
+        {webgl && ready ? (
           <Canvas
             dpr={[1, TIER_CONFIG[tier].dpr]}
             frameloop={frameloop}

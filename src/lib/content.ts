@@ -8,11 +8,23 @@ import type {
 
 export const fallbackProfile: Partial<Profile> = {
   full_name: 'Keiner García',
-  professional_title: 'Desarrollador y Analista de Software',
-  bio: 'Creo soluciones digitales modernas mediante desarrollo web, aplicaciones de escritorio, automatización e inteligencia artificial.',
-  formation: ['TODO'],
-  experience: ['TODO'],
-  location: 'TODO',
+  professional_title: 'Desarrollador de Software',
+  bio: 'Desarrollador de software en formación con experiencia práctica en desarrollo y mantenimiento de aplicaciones Android para terminales POS bancarios. Manejo de Java y Android Studio, análisis de tramas ISO8583 y pruebas de comunicación, con bases sólidas en POO, bases de datos e integración de APIs REST. Perfil analítico y orientado a la calidad, con facilidad para aprender nuevas tecnologías y aportar en equipos de desarrollo y soporte técnico.',
+  formation: [
+    'Tecnología en Análisis y Desarrollo de Software — SENA · CIES · Ocaña, Norte de Santander (2024 – 2026)',
+    'Bachiller Académico — Institución Educativa Fray José María Arévalo (2023)',
+    'Bootcamp de Programación Web — 159 horas · Talento Tech / Asoandes (certificado)',
+    'Curso especial: Diseñar Páginas Web con HTML y JavaScript (certificado)',
+  ],
+  experience: [
+    'Experiencia en Java y Android para terminales POS bancarios',
+    'Análisis de tramas ISO8583 y pruebas de comunicación',
+    'Desarrollo web con React, TypeScript, Supabase y APIs REST',
+    'Documentación técnica y gestión de versiones con Git, Bitbucket y Sourcetree',
+  ],
+  location: 'Playa de Belén, Norte de Santander, Colombia',
+  email: 'keiner.garciaortiz@gmail.com',
+  phone: '+57 316 761 9309',
   role: 'admin',
 }
 
@@ -128,30 +140,8 @@ export const fallbackTechnologies: Technology[] = [
   { id: 't19', name: 'Automatización', category: 'ia-automatizacion', icon: null, description: null, level: null, sort_order: 3, is_active: true, created_at: '', updated_at: '' },
 ]
 
-export const fallbackProjects: Project[] = [
-  {
-    id: 'p1',
-    title: 'Portafolio ElChivalez',
-    slug: 'portafolio-elchivalez',
-    short_description:
-      'Este sitio: un portafolio profesional administrable, con experiencia 3D, CMS propio y contenido dinámico vía Supabase.',
-    description: '',
-    problem: '',
-    solution: '',
-    features: null,
-    results: null,
-    category: 'Desarrollo Web',
-    status: 'published',
-    featured: true,
-    cover_image: null,
-    github_url: 'TODO',
-    demo_url: 'https://elchivalez.com',
-    sort_order: 0,
-    created_at: '',
-    updated_at: '',
-    technologies: [],
-  },
-]
+// Sin proyectos de ejemplo: si la base está vacía, el sitio muestra su estado vacío.
+export const fallbackProjects: Project[] = []
 
 export const TECHNOLOGY_CATEGORY_LABELS: Record<string, string> = {
   frontend: 'Frontend',
@@ -168,7 +158,8 @@ export const TECHNOLOGY_CATEGORY_ORDER = [
 ]
 
 export const fallbackSocialLinks: SocialLink[] = [
-  { id: 'sl1', platform: 'whatsapp', url: 'TODO', icon: null, sort_order: 0, is_active: true, created_at: '', updated_at: '' },
-  { id: 'sl2', platform: 'github', url: 'TODO', icon: null, sort_order: 1, is_active: true, created_at: '', updated_at: '' },
-  { id: 'sl3', platform: 'linkedin', url: 'TODO', icon: null, sort_order: 2, is_active: true, created_at: '', updated_at: '' },
+  { id: 'sl1', platform: 'whatsapp', url: 'https://wa.me/573167619309', icon: null, sort_order: 0, is_active: true, created_at: '', updated_at: '' },
+  { id: 'sl2', platform: 'github', url: 'https://github.com/keinergarcia', icon: null, sort_order: 1, is_active: true, created_at: '', updated_at: '' },
+  { id: 'sl3', platform: 'linkedin', url: 'https://www.linkedin.com/in/keiner-garc%C3%ADa-ortiz-5b15a3402/', icon: null, sort_order: 2, is_active: true, created_at: '', updated_at: '' },
+  { id: 'sl4', platform: 'portafolio', url: 'https://elchivalez.vercel.app/', icon: null, sort_order: 3, is_active: true, created_at: '', updated_at: '' },
 ]

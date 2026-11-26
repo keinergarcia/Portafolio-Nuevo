@@ -1,4 +1,4 @@
-import logoUrl from '@/assets/logo-elchivalez.png'
+import logoUrl from '@/assets/logo-elchivalez.webp'
 
 interface FallbackVisualProps {
   active?: boolean

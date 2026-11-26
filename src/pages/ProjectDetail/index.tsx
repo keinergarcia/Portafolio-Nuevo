@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { Reveal } from '@/components/animations/Reveal'
 import { usePortfolioData } from '@/contexts/PortfolioData'
+import { resolveTechnologyLogo } from '@/lib/technology-logos'
 import type { Project } from '@/types'
 
 function DetailBlock({
@@ -135,11 +136,15 @@ export function ProjectDetail() {
           {project.technologies && project.technologies.length > 0 && (
             <Reveal delay={0.1}>
               <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
-                  <Badge key={tech.id} className="font-mono text-[11px]">
-                    {tech.name}
-                  </Badge>
-                ))}
+                {project.technologies.map((tech) => {
+                  const logo = resolveTechnologyLogo({ name: tech.name, icon: tech.icon })
+                  return (
+                    <Badge key={tech.id} className="font-mono text-[11px]">
+                      {logo && <img src={logo.src} alt="" className="h-3.5 w-3.5 shrink-0 object-contain" />}
+                      {tech.name}
+                    </Badge>
+                  )
+                })}
               </div>
             </Reveal>
           )}

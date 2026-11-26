@@ -4,7 +4,7 @@ import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import type { RootState } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import logoUrl from '@/assets/logo-elchivalez.png'
+import logoUrl from '@/assets/logo-elchivalez.webp'
 
 const STAR_COLORS = ['#ffffff', '#e8edf7', '#d4e0fb'] as const
 

@@ -16,17 +16,26 @@ export interface WorkExperience {
 export const WORK_EXPERIENCE: WorkExperience[] = [
   {
     id: 'wposs',
-    role: 'Desarrollador de Software Junior',
+    role: 'Practicante de Desarrollo de Software',
     company: 'WPOSS – World POS Solutions',
     companyUrl: 'https://www.wposs.com',
     logo: wpossLogo,
     current: true,
-    period: 'Actualmente',
+    period: 'Oct. 2026 – Actualidad',
     summary: [
-      'Participo en el desarrollo, mantenimiento y mejora de soluciones de software, trabajando con aplicaciones Android, gestión de código mediante Git y Bitbucket, y automatización de procesos CI/CD.',
-      'También realizo análisis técnico, pruebas de software, revisión de código y documentación, contribuyendo a la calidad, estabilidad y evolución de las soluciones tecnológicas de la empresa.',
+      'Desarrollo y ajuste de código fuente en Java para aplicaciones Android en terminales POS bancarios. Depuración con Android Studio y ADB, pruebas funcionales y de conectividad, y análisis de tramas ISO8583 para el diagnóstico de fallos en transacciones.',
+      'Elaboro documentación técnica de cambios y pruebas, y gestiono versiones y colaboración con Git, Bitbucket y Sourcetree.',
     ],
-    technologies: ['Java', 'Android Studio', 'Git', 'Bitbucket', 'Gradle', 'Docker', 'CI/CD'],
+    technologies: [
+      'Java',
+      'Android Studio',
+      'ADB',
+      'ISO8583',
+      'POS bancarios',
+      'Git',
+      'Bitbucket',
+      'Sourcetree',
+    ],
   },
 ]
 

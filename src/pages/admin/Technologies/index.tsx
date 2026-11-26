@@ -16,6 +16,7 @@ import { Field, Input, Select, Textarea } from '@/components/ui/Field'
 import { Button } from '@/components/ui/Button'
 import { Spinner } from '@/components/ui/Spinner'
 import { cn } from '@/lib/utils'
+import { resolveTechnologyLogo } from '@/lib/technology-logos'
 
 const TECH_CATEGORIES = [
   { value: 'frontend', label: 'Frontend' },
@@ -112,36 +113,46 @@ export function Technologies() {
                 {group.items.length === 0 && (
                   <p className="text-sm text-muted">Sin tecnologías en esta categoría.</p>
                 )}
-                {group.items.map((technology) => (
-                  <span
-                    key={technology.id}
-                    className={cn(
-                      'inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm',
-                      !technology.is_active ? 'border-white/10 text-muted/60' : 'border-white/[0.08] bg-white/[0.03] text-foreground',
-                    )}
-                  >
-                    {technology.name}
-                    {technology.level !== null && (
-                      <span className="font-mono text-xs text-muted">{technology.level}%</span>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => setModal({ open: true, editing: technology })}
-                      className="rounded-md p-0.5 text-muted transition hover:text-foreground"
-                      aria-label={`Editar ${technology.name}`}
+                {group.items.map((technology) => {
+                  const logo = resolveTechnologyLogo({ name: technology.name, icon: technology.icon })
+                  return (
+                    <span
+                      key={technology.id}
+                      className={cn(
+                        'inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-sm',
+                        !technology.is_active ? 'border-white/10 text-muted/60' : 'border-white/[0.08] bg-white/[0.03] text-foreground',
+                      )}
                     >
-                      <Pencil className="h-3.5 w-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => void remove(technology)}
-                      className="rounded-md p-0.5 text-muted transition hover:text-red-400"
-                      aria-label={`Eliminar ${technology.name}`}
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
-                  </span>
-                ))}
+                      {logo ? (
+                        <img src={logo.src} alt="" className="h-4 w-4 shrink-0 object-contain" />
+                      ) : (
+                        <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded bg-white/10 font-mono text-[10px] uppercase">
+                          {technology.name.slice(0, 1)}
+                        </span>
+                      )}
+                      {technology.name}
+                      {technology.level !== null && (
+                        <span className="font-mono text-xs text-muted">{technology.level}%</span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setModal({ open: true, editing: technology })}
+                        className="rounded-md p-0.5 text-muted transition hover:text-foreground"
+                        aria-label={`Editar ${technology.name}`}
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => void remove(technology)}
+                        className="rounded-md p-0.5 text-muted transition hover:text-red-400"
+                        aria-label={`Eliminar ${technology.name}`}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </span>
+                  )
+                })}
               </div>
             </section>
           ))}

@@ -17,6 +17,13 @@ import sqliteLogo from '@/assets/technologies/sqlite.svg'
 import supabaseLogo from '@/assets/technologies/supabase.svg'
 import tailwindLogo from '@/assets/technologies/tailwindcss.svg'
 import typescriptLogo from '@/assets/technologies/typescript.svg'
+import androidLogo from '@/assets/technologies/android.svg'
+import androidStudioLogo from '@/assets/technologies/android-studio.svg'
+import bitbucketLogo from '@/assets/technologies/bitbucket.svg'
+import gitLogo from '@/assets/technologies/git.svg'
+import iso8583Logo from '@/assets/technologies/iso8583.svg'
+import posBancariosLogo from '@/assets/technologies/pos-bancarios.svg'
+import sourcetreeLogo from '@/assets/technologies/sourcetree.svg'
 
 export interface TechnologyLogo {
   src: string
@@ -44,6 +51,13 @@ const LOGOS = {
   ia: { src: iaGenerativaLogo, color: '#a78bfa' },
   apis: { src: apisLogo, color: '#22d3ee' },
   automatizacion: { src: automatizacionLogo, color: '#6366f1' },
+  git: { src: gitLogo, color: '#f03c2e' },
+  bitbucket: { src: bitbucketLogo, color: '#0052cc' },
+  sourcetree: { src: sourcetreeLogo, color: '#0052cc' },
+  androidstudio: { src: androidStudioLogo, color: '#3ddc84' },
+  android: { src: androidLogo, color: '#3ddc84' },
+  iso8583: { src: iso8583Logo, color: '#22d3ee' },
+  posbancarios: { src: posBancariosLogo, color: '#6366f1' },
 } satisfies Record<string, TechnologyLogo>
 
 type LogoKey = keyof typeof LOGOS
@@ -90,6 +104,17 @@ const ALIASES: Record<string, LogoKey> = {
   automatizaciones: 'automatizacion',
   automation: 'automatizacion',
   workflow: 'automatizacion',
+  git: 'git',
+  bitbucket: 'bitbucket',
+  sourcetree: 'sourcetree',
+  androidstudio: 'androidstudio',
+  android: 'android',
+  adb: 'android',
+  iso8583: 'iso8583',
+  iso: 'iso8583',
+  pos: 'posbancarios',
+  posbancarios: 'posbancarios',
+  terminalespos: 'posbancarios',
 }
 
 /** Reduce un nombre a un slug sin acentos ni símbolos: "Node.js" -> "nodejs". */

@@ -282,7 +282,7 @@ export function ProfileAdmin() {
             </Field>
             <Field label="Título profesional" error={errors.professional_title?.message}>
               <Input
-                placeholder="Desarrollador y Analista de Software"
+                placeholder="Desarrollador de Software"
                 {...register('professional_title')}
               />
             </Field>
