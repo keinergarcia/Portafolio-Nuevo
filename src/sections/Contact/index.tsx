@@ -33,15 +33,94 @@ type Channel = {
   icon: ComponentType<{ size?: number | string; className?: string }>
   label: string
   value: string
+  href: string
+  external: boolean
+}
+
+const PLATFORM_LABELS: Record<string, string> = {
+  whatsapp: 'WhatsApp',
+  github: 'GitHub',
+  linkedin: 'LinkedIn',
+  portafolio: 'Portafolio',
+  instagram: 'Instagram',
+  twitter: 'X',
+  tiktok: 'TikTok',
+  youtube: 'YouTube',
+  facebook: 'Facebook',
+}
+
+function platformLabel(platform: string) {
+  return (
+    PLATFORM_LABELS[platform] ??
+    platform.replace(/^\w/, (char) => char.toUpperCase())
+  )
+}
+
+function urlHandle(url: string) {
+  try {
+    const segment = new URL(url).pathname.split('/').filter(Boolean)[0]
+    return segment ? decodeURIComponent(segment) : ''
+  } catch {
+    return ''
+  }
+}
+
+function cleanHost(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return ''
+  }
+}
+
+/** Texto legible para la tarjeta: nunca mostramos la URL completa. */
+function socialValue(link: SocialLink) {
+  if (!link.url || link.url === 'TODO') return 'TODO'
+  switch (link.platform) {
+    case 'whatsapp':
+      return 'Chat directo'
+    case 'github': {
+      const handle = urlHandle(link.url)
+      return handle ? `@${handle}` : 'Ver GitHub'
+    }
+    case 'linkedin':
+      return 'Mi perfil profesional'
+    case 'portafolio':
+      return 'Ver portafolio'
+    case 'instagram':
+    case 'twitter':
+    case 'tiktok': {
+      const handle = urlHandle(link.url)
+      return handle ? `@${handle}` : `Ver ${platformLabel(link.platform)}`
+    }
+    case 'youtube':
+      return 'Mi canal'
+    case 'facebook':
+      return 'Mi página'
+    default:
+      return cleanHost(link.url) || 'Ver enlace'
+  }
 }
 
 function buildChannels(profile: Profile, links: SocialLink[]): Channel[] {
   const channels: Channel[] = []
   if (profile.email) {
-    channels.push({ icon: Mail, label: 'Email', value: profile.email })
+    channels.push({
+      icon: Mail,
+      label: 'Email',
+      value: profile.email,
+      href: `mailto:${profile.email}`,
+      external: false,
+    })
   }
   if (profile.phone) {
-    channels.push({ icon: MessageCircle, label: 'Teléfono', value: profile.phone })
+    channels.push({
+      icon: MessageCircle,
+      label: 'Teléfono',
+      value: profile.phone,
+      href: `tel:${profile.phone.replace(/[^\d+]/g, '')}`,
+      external: false,
+    })
   }
   const icons: Record<string, Channel['icon']> = {
     whatsapp: MessageCircle,
@@ -52,7 +131,13 @@ function buildChannels(profile: Profile, links: SocialLink[]): Channel[] {
   for (const link of links) {
     if (!link.is_active) continue
     const Icon = icons[link.platform] ?? Globe
-    channels.push({ icon: Icon, label: link.platform, value: link.url })
+    channels.push({
+      icon: Icon,
+      label: platformLabel(link.platform),
+      value: socialValue(link),
+      href: link.url === 'TODO' ? '' : link.url,
+      external: true,
+    })
   }
   return channels
 }
@@ -133,7 +218,7 @@ export function Contact() {
             </p>
 
             <ul className="space-y-3">
-              {channels.map((channel) => {
+              {channels.map((channel, index) => {
                 const isPlaceholder = channel.value === 'TODO'
                 const content = (
                   <span className="glass group flex items-center gap-4 px-5 py-4 transition-colors hover:border-white/15">
@@ -160,14 +245,14 @@ export function Contact() {
                   </span>
                 )
                 return (
-                  <li key={channel.label}>
+                  <li key={`${channel.label}-${index}`}>
                     {isPlaceholder ? (
                       content
                     ) : (
                       <a
-                        href={channel.value}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={channel.href}
+                        target={channel.external ? '_blank' : undefined}
+                        rel={channel.external ? 'noopener noreferrer' : undefined}
                         aria-label={`Contactar por ${channel.label}`}
                       >
                         {content}

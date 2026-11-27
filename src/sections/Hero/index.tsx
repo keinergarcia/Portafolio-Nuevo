@@ -30,10 +30,6 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden" aria-label="Presentación">
       <div
-        className="grid-glow pointer-events-none absolute inset-0 opacity-70"
-        aria-hidden="true"
-      />
-      <div
         aria-hidden="true"
         className="pointer-events-none absolute top-1/4 -left-48 h-[34rem] w-[34rem] rounded-full bg-primary/[0.06] blur-[130px]"
       />
