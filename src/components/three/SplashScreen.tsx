@@ -1,6 +1,6 @@
 /* oxlint-disable react/purity, react/immutability, react/set-state-in-effect -- intro de splash: el logo real se ensambla con partículas muestreadas de su píxeles; los buffers/meshes 3D se mutan deliberadamente en el loop de frames (sistema físico externo al render) */
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
-import { Canvas, useFrame, useLoader } from '@react-three/fiber'
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber'
 import { motion, useReducedMotion } from 'motion/react'
 import * as THREE from 'three'
 import { SPACE_CONFIG, useSpaceTier } from '@/components/three/background/useSpaceTier'
@@ -160,7 +160,7 @@ interface LogoSampleData {
   textY1: number
 }
 
-function sampleLogo(img: HTMLImageElement): LogoSampleData {
+function sampleLogo(img: HTMLImageElement, fit = 1): LogoSampleData {
   const maxW = 512
   const sc = Math.min(1, maxW / (img.width || 1))
   const w = Math.max(2, Math.round((img.width || 1) * sc))
@@ -260,7 +260,8 @@ function sampleLogo(img: HTMLImageElement): LogoSampleData {
     tY1 = maxY
   }
 
-  const scaleToWorld = LOGO_WORLD_H / bh
+  // `fit` reduce el logo en pantallas verticales para que nunca se recorte.
+  const scaleToWorld = (LOGO_WORLD_H * fit) / bh
   const centerX = (minX + maxX) / 2
   const centerY = (minY + maxY) / 2
   const wx = (v: number) => (v - centerX) * scaleToWorld
@@ -1094,16 +1095,30 @@ function SplashScene({
   reduce: boolean
 }) {
   const logoTexture = useLoader(THREE.TextureLoader, logoUrl)
+  const { size } = useThree()
 
   useEffect(() => {
     logoTexture.colorSpace = THREE.SRGBColorSpace
     logoTexture.needsUpdate = true
   }, [logoTexture])
 
+  /* La cámara termina su dolly en z≈6.6. Calculamos el ancho visible en ese
+     punto y encogemos el logo si no cabe (móvil en vertical), de modo que el
+     wordmark nunca se corte. En escritorio el factor es 1 y no cambia nada. */
+  const fit = useMemo(() => {
+    const img = logoTexture.image as HTMLImageElement
+    const aspect = size.width / Math.max(1, size.height)
+    const finalCamZ = 6.6
+    const halfHeight = Math.tan(THREE.MathUtils.degToRad(55 / 2)) * finalCamZ
+    const visibleWidth = 2 * halfHeight * aspect
+    const logoWidth = LOGO_WORLD_H * ((img.width || 1) / (img.height || 1))
+    return Math.min(1, (visibleWidth * 0.92) / logoWidth)
+  }, [logoTexture, size.width, size.height])
+
   const samples = useMemo(() => {
     const img = logoTexture.image as HTMLImageElement
-    return sampleLogo(img)
-  }, [logoTexture])
+    return sampleLogo(img, fit)
+  }, [logoTexture, fit])
 
   return (
     <>

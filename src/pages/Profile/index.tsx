@@ -126,7 +126,7 @@ function ChannelCard({
         <span className="block text-[11px] font-semibold tracking-[0.16em] text-muted uppercase">
           {label}
         </span>
-        <span className="mt-1 block truncate text-sm text-foreground/90">{value}</span>
+        <span className="mt-1 block text-sm break-all text-foreground/90 sm:truncate">{value}</span>
       </span>
       {href && (
         <ArrowUpRight
@@ -262,7 +262,7 @@ export function ProfilePage() {
                     {email && (
                       <a
                         href={`mailto:${email}`}
-                        className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+                        className="inline-flex items-center gap-2 py-2.5 transition-colors hover:text-primary sm:py-0"
                       >
                         <Mail size={15} aria-hidden="true" className="text-primary" />
                         {email}
@@ -271,7 +271,7 @@ export function ProfilePage() {
                     {phone && (
                       <a
                         href={`tel:${phone.replace(/[^\d+]/g, '')}`}
-                        className="inline-flex items-center gap-2 transition-colors hover:text-primary"
+                        className="inline-flex items-center gap-2 py-2.5 transition-colors hover:text-primary sm:py-0"
                       >
                         <Phone size={15} aria-hidden="true" className="text-primary" />
                         {phone}
@@ -360,7 +360,7 @@ export function ProfilePage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={`Abrir ${label}`}
-                        className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm text-muted transition hover:border-primary/40 hover:text-primary"
+                        className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2 text-sm text-muted transition hover:border-primary/40 hover:text-primary min-h-11 sm:min-h-0"
                       >
                         <Icon size={16} aria-hidden="true" />
                         {label}

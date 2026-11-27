@@ -174,7 +174,7 @@ export function About() {
               </a>
               <a
                 href="#experiencia"
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+                className="mt-4 inline-flex items-center gap-1.5 py-2.5 text-sm font-medium text-primary transition-colors hover:text-primary/80 sm:py-0"
               >
                 Ver experiencia laboral
                 <ArrowUpRight size={14} aria-hidden="true" />
@@ -192,7 +192,7 @@ export function About() {
 
             <Link
               to="/perfil"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+              className="group inline-flex items-center gap-2 py-2.5 text-sm font-medium text-primary transition-colors hover:text-primary/80 sm:py-0"
             >
               Ver perfil completo
               <ArrowUpRight

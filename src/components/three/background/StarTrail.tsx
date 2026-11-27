@@ -42,6 +42,8 @@ export function StarTrail() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas || reduce || !background3D) return
+    // La estela sigue al puntero: en pantallas táctiles no aporta y gasta batería.
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
     const maybe = canvas.getContext('2d')
     if (!maybe) return
     const c2d = maybe

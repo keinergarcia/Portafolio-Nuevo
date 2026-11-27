@@ -69,7 +69,7 @@ export function Navbar({ onOpenMenu }: NavbarProps) {
 
       <button
         type="button"
-        className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 text-foreground transition-colors hover:bg-white/[0.06] md:hidden"
+        className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-foreground transition-colors hover:bg-white/[0.06] md:hidden"
         aria-label="Abrir menú"
         onClick={onOpenMenu}
       >

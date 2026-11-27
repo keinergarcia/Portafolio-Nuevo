@@ -16,7 +16,7 @@ export function FxPanel() {
   } = useEffects()
 
   return (
-    <div className="fixed bottom-4 right-4 z-[90]">
+    <div className="fixed right-4 bottom-4 z-[90] hidden md:block">
       {open ? (
         <section
           aria-label="Panel de efectos de fondo"

@@ -14,7 +14,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[60] bg-background/95 backdrop-blur-2xl md:hidden"
+          className="fixed inset-0 z-[60] overflow-y-auto overscroll-contain bg-background backdrop-blur-2xl md:hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -23,13 +23,13 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-4 right-5 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-foreground transition-colors hover:bg-white/[0.06]"
+            className="fixed top-[max(1rem,env(safe-area-inset-top))] right-5 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 text-foreground transition-colors hover:bg-white/[0.06]"
             aria-label="Cerrar menú"
           >
             <X size={22} />
           </button>
 
-          <div className="shell flex h-full flex-col justify-center">
+          <div className="shell flex min-h-full flex-col justify-center py-20 pb-[max(2rem,env(safe-area-inset-bottom))]">
             <p className="eyebrow mb-8">Menú</p>
             <div className="flex flex-col gap-1">
               {NAV_LINKS.map((link) => (

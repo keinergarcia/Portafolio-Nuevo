@@ -31,7 +31,7 @@ function DocumentRow({ document }: { document: Document }) {
         </span>
 
         <div className="min-w-0 flex-1">
-          <p className="truncate font-semibold tracking-tight text-foreground">
+          <p className="line-clamp-2 font-semibold tracking-tight text-foreground sm:line-clamp-none">
             {document.title}
           </p>
           <p className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-sm text-muted">
@@ -53,7 +53,7 @@ function DocumentRow({ document }: { document: Document }) {
           target="_blank"
           rel="noreferrer"
           onClick={() => void registerDocumentDownload(document.id)}
-          className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2.5 text-sm font-medium text-primary transition hover:bg-primary/20 hover:shadow-glow"
+          className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2.5 text-sm font-medium text-primary transition hover:bg-primary/20 hover:shadow-glow min-h-11 sm:min-h-0"
           aria-label={`Descargar ${document.title}`}
         >
           <Download size={16} aria-hidden="true" />

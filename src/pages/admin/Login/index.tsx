@@ -124,7 +124,7 @@ export function Login() {
             en tu archivo <code className="font-mono text-xs text-primary">.env</code>.
           </p>
           <p className="mt-8 text-center text-sm text-muted">
-            <Link to="/" className="inline-flex items-center gap-1.5 transition-colors hover:text-primary">
+            <Link to="/" className="inline-flex items-center gap-1.5 py-2.5 transition-colors hover:text-primary sm:py-0">
               ← Volver al portafolio
             </Link>
           </p>
@@ -272,7 +272,7 @@ export function Login() {
                     <button
                       type="button"
                       onClick={() => setShowPassword((value) => !value)}
-                      className="absolute top-1/2 right-3 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-muted transition hover:bg-white/[0.06] hover:text-foreground"
+                      className="absolute top-1/2 right-1.5 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-muted transition hover:bg-white/[0.06] hover:text-foreground sm:right-3 sm:h-8 sm:w-8"
                       aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                     >
                       {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
@@ -302,7 +302,7 @@ export function Login() {
               <p className="mt-8 text-center text-sm text-muted">
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
+                  className="inline-flex items-center gap-1.5 py-2.5 transition-colors hover:text-primary sm:py-0"
                 >
                   ← Volver al portafolio
                 </Link>

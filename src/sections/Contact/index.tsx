@@ -144,7 +144,7 @@ export function Contact() {
                       <span className="block text-[11px] font-semibold tracking-[0.16em] text-muted uppercase">
                         {channel.label}
                       </span>
-                      <span className="mt-1 block truncate text-sm text-foreground/90">
+                      <span className="mt-1 block text-sm break-all text-foreground/90 sm:truncate">
                         {isPlaceholder
                           ? '¿Disponible próximamente?'
                           : channel.value}

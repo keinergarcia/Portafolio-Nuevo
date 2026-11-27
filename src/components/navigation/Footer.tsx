@@ -54,12 +54,12 @@ export function Footer() {
 
           <nav aria-label="Enlaces del pie de página">
             <p className="eyebrow mb-4">Navegación</p>
-            <ul className="space-y-2.5">
+            <ul className="space-y-1 sm:space-y-2.5">
               {NAV_LINKS.map((link) => (
                 <li key={link.to}>
                   <Link
                     to={link.to}
-                    className="text-sm text-muted transition-colors hover:text-foreground"
+                    className="inline-flex min-h-10 items-center text-sm text-muted transition-colors hover:text-foreground sm:min-h-0"
                   >
                     {link.label}
                   </Link>

@@ -40,7 +40,7 @@ export function ExperienceCard({
               href={job.companyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group/link mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-primary transition-colors hover:text-primary/80"
+              className="group/link mt-1 inline-flex items-center gap-1.5 py-2.5 text-sm font-medium text-primary transition-colors hover:text-primary/80 sm:py-0"
             >
               {job.company}
               <ArrowUpRight

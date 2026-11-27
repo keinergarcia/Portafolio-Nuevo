@@ -83,7 +83,7 @@ export function PricingCategoryCard({
           type="button"
           onClick={onQuote}
           aria-label={`Cotizar servicios de ${category.name}`}
-          className="flex w-full items-center justify-between gap-2 rounded-xl border border-primary/20 bg-primary/[0.05] px-3.5 py-2.5 font-mono text-[10px] tracking-[0.14em] text-primary uppercase transition-colors duration-200 hover:border-primary/35 hover:bg-primary/10"
+          className="flex w-full min-h-11 items-center justify-between gap-2 rounded-xl border border-primary/20 bg-primary/[0.05] px-3.5 py-2.5 font-mono text-[10px] tracking-[0.14em] text-primary uppercase transition-colors duration-200 hover:border-primary/35 hover:bg-primary/10 sm:min-h-0"
         >
           Cotizar este servicio
           <ArrowUpRight size={13} aria-hidden="true" />
