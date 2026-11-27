@@ -937,6 +937,7 @@ function PulseRing({
   maxScale,
   maxOpacity,
   z = 0.04,
+  fit = 1,
 }: {
   reduce: boolean
   delay: number
@@ -945,6 +946,7 @@ function PulseRing({
   maxScale: number
   maxOpacity: number
   z?: number
+  fit?: number
 }) {
   const meshRef = useRef<THREE.Mesh>(null)
 
@@ -957,7 +959,9 @@ function PulseRing({
     const mat = m.material as THREE.MeshBasicMaterial
     m.visible = pr > 0
     if (pr <= 0) return
-    m.scale.setScalar(0.25 + pr * (maxScale - 0.25))
+    // En móvil los anillos acompañan el tamaño del logo para no salir de pantalla.
+    const scaledMax = maxScale * fit
+    m.scale.setScalar(0.25 + pr * (scaledMax - 0.25))
     mat.opacity = (1 - pr) * maxOpacity
     m.rotation.x = Math.sin(t * 1.2) * 0.05
     m.rotation.y = Math.cos(t * 0.9) * 0.05
@@ -1102,7 +1106,7 @@ function SplashScene({
     logoTexture.needsUpdate = true
   }, [logoTexture])
 
-  /* La cámara termina su dolly en z≈6.6. Calculamos el ancho visible en ese
+  /* La cámara termina su dolly en z≈6.6. Calculamos el área visible en ese
      punto y encogemos el logo si no cabe (móvil en vertical), de modo que el
      wordmark nunca se corte. En escritorio el factor es 1 y no cambia nada. */
   const fit = useMemo(() => {
@@ -1111,8 +1115,11 @@ function SplashScene({
     const finalCamZ = 6.6
     const halfHeight = Math.tan(THREE.MathUtils.degToRad(55 / 2)) * finalCamZ
     const visibleWidth = 2 * halfHeight * aspect
+    const visibleHeight = 2 * halfHeight
     const logoWidth = LOGO_WORLD_H * ((img.width || 1) / (img.height || 1))
-    return Math.min(1, (visibleWidth * 0.92) / logoWidth)
+    const fitWidth = (visibleWidth * 0.82) / logoWidth
+    const fitHeight = (visibleHeight * 0.8) / LOGO_WORLD_H
+    return Math.min(1, fitWidth, fitHeight)
   }, [logoTexture, size.width, size.height])
 
   const samples = useMemo(() => {
@@ -1129,8 +1136,8 @@ function SplashScene({
       <FieldGlow reduce={reduce} />
       <LogoTexture samples={samples} reduce={reduce} />
       <LogoParticles samples={samples} count={swarmCount} reduce={reduce} />
-      <PulseRing reduce={reduce} delay={0} color="#ffffff" width={0.012} maxScale={2.6} maxOpacity={0.5} z={0.06} />
-      <PulseRing reduce={reduce} delay={0.07} color="#a78bfa" width={0.014} maxScale={2.4} maxOpacity={0.55} z={0.05} />
+      <PulseRing reduce={reduce} delay={0} color="#ffffff" width={0.012} maxScale={2.6} maxOpacity={0.5} z={0.06} fit={fit} />
+      <PulseRing reduce={reduce} delay={0.07} color="#a78bfa" width={0.014} maxScale={2.4} maxOpacity={0.55} z={0.05} fit={fit} />
       <TextRevealLine samples={samples} reduce={reduce} />
     </>
   )

@@ -948,7 +948,7 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
           ref={(el) => {
             refs.clientLabel = el
           }}
-          className="flex items-center gap-3 whitespace-nowrap rounded-full border-2 px-5 py-2.5 backdrop-blur-md"
+          className="hidden items-center gap-3 whitespace-nowrap rounded-full border-2 px-5 py-2.5 backdrop-blur-md lg:flex"
           style={{
             opacity: reduce ? 0.95 : 0.94,
             borderColor: 'rgba(190,215,255,0.5)',
@@ -981,7 +981,7 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
             ref={(el) => {
               refs.entries[i] = el
             }}
-            className="grid h-8 w-8 place-items-center rounded-lg border backdrop-blur-sm"
+            className="hidden h-8 w-8 place-items-center rounded-lg border backdrop-blur-sm lg:grid"
             style={{
               opacity: 0,
               borderColor: 'rgba(140,190,255,0.32)',
@@ -1031,7 +1031,7 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
               ref={(el) => {
                 refs.labels[r] = el
               }}
-              className="flex items-center gap-2 whitespace-nowrap rounded-full border px-3 py-1.5 backdrop-blur-md"
+              className="hidden items-center gap-2 whitespace-nowrap rounded-full border px-3 py-1.5 backdrop-blur-md lg:flex"
               style={{
                 opacity: reduce ? 0.55 : 0,
                 transition: 'opacity 420ms ease',
