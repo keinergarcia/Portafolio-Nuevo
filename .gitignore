@@ -16,6 +16,9 @@ lerna-debug.log*
 supabase/.temp
 supabase/.branches
 
+# Vercel CLI (estado local)
+.vercel
+
 node_modules
 dist
 dist-ssr
