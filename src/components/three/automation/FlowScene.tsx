@@ -805,7 +805,22 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
   const size = useThree((state) => state.size)
   const camera = useThree((state) => state.camera)
   const aspect = size.width / Math.max(1, size.height)
-  const fitX = useMemo(() => clamp((HALF_VIEW * aspect * 0.94) / FLOW_SPAN, 0.32, 1), [aspect])
+  /* En pantallas angostas (móvil/tablet) la escena se comprime lo justo para
+     que las etiquetas compactas quepan dentro del canvas. En escritorio el
+     cálculo es el mismo de siempre. */
+  const compact = size.width < 1024
+  const fitX = useMemo(() => {
+    const base = clamp((HALF_VIEW * aspect * 0.94) / FLOW_SPAN, 0.32, 1)
+    if (!compact) return base
+    const visibleHalf = HALF_VIEW * aspect
+    const worldPerPx = (visibleHalf * 2) / Math.max(1, size.width)
+    const labelHalf = 52 * worldPerPx
+    const clientHalf = 46 * worldPerPx
+    const margin = 8 * worldPerPx
+    const fitRight = (visibleHalf - labelHalf - margin) / (DEST_X + 1.15)
+    const fitLeft = (visibleHalf - clientHalf - margin) / Math.abs(CLIENT_X)
+    return clamp(Math.min(base, fitRight, fitLeft), 0.12, 1)
+  }, [aspect, compact, size.width])
 
   const refs = useRef<EngineRefs>({
     anchors: [],
@@ -948,7 +963,7 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
           ref={(el) => {
             refs.clientLabel = el
           }}
-          className="hidden items-center gap-3 whitespace-nowrap rounded-full border-2 px-5 py-2.5 backdrop-blur-md lg:flex"
+          className="flex items-center gap-2 whitespace-nowrap rounded-full border px-2.5 py-1.5 backdrop-blur-md lg:gap-3 lg:border-2 lg:px-5 lg:py-2.5"
           style={{
             opacity: reduce ? 0.95 : 0.94,
             borderColor: 'rgba(190,215,255,0.5)',
@@ -957,15 +972,15 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
           }}
         >
           <span
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full sm:h-10 sm:w-10"
+            className="grid h-6 w-6 shrink-0 place-items-center rounded-full lg:h-10 lg:w-10"
             style={{
               background: 'rgba(150,190,255,0.16)',
               boxShadow: 'inset 0 0 0 1px rgba(200,225,255,0.35), 0 0 16px -4px rgba(160,200,255,0.7)',
             }}
           >
-            <User size={18} style={{ color: '#dceeff' }} aria-hidden="true" />
+            <User size={18} className="h-3 w-3 lg:h-[18px] lg:w-[18px]" style={{ color: '#dceeff' }} aria-hidden="true" />
           </span>
-          <span className="font-mono text-sm font-semibold tracking-[0.2em] text-white/95 uppercase sm:text-base">Cliente</span>
+          <span className="font-mono text-[9px] font-semibold tracking-[0.12em] text-white/95 uppercase lg:text-base lg:tracking-[0.2em]">Cliente</span>
         </div>
       </Html>
 
@@ -995,7 +1010,7 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
       ))}
 
       <Html
-        position={[0, -1.1, 0]}
+        position={[0, compact ? -1.62 : -1.1, 0]}
         center
         zIndexRange={[35, 0]}
         style={{ pointerEvents: 'none', userSelect: 'none' }}
@@ -1004,7 +1019,7 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
           ref={(el) => {
             refs.centerLabel = el
           }}
-          className="whitespace-nowrap text-center font-mono text-[11px] uppercase tracking-[0.38em] text-white/70 sm:text-sm"
+          className="whitespace-nowrap text-center font-mono text-[8px] uppercase tracking-[0.24em] text-white/70 lg:text-sm lg:tracking-[0.38em]"
           style={{
             opacity: 0,
             transition: 'opacity 600ms ease',
@@ -1012,7 +1027,7 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
           }}
         >
           <span className="text-cyan-200/80">IA</span>
-          <span className="mx-2 text-white/25">/</span>
+          <span className="mx-1 text-white/25 lg:mx-2">/</span>
           <span>Automatización</span>
         </div>
       </Html>
@@ -1031,7 +1046,7 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
               ref={(el) => {
                 refs.labels[r] = el
               }}
-              className="hidden items-center gap-2 whitespace-nowrap rounded-full border px-3 py-1.5 backdrop-blur-md lg:flex"
+              className="flex items-center gap-1 whitespace-nowrap rounded-full border px-2 py-0.5 backdrop-blur-md lg:gap-2 lg:px-3 lg:py-1.5"
               style={{
                 opacity: reduce ? 0.55 : 0,
                 transition: 'opacity 420ms ease',
@@ -1040,9 +1055,11 @@ export function FlowScene({ pointer, tier, reduce }: { pointer: FlowPointer; tie
                 boxShadow: `0 0 22px -8px ${route.color}66`,
               }}
             >
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: route.color }} />
-              <Icon size={13} style={{ color: route.color }} aria-hidden="true" />
-              <span className="font-mono text-[10px] font-medium tracking-[0.14em] text-white/90 sm:text-xs">{route.label}</span>
+              <span className="h-1 w-1 shrink-0 rounded-full lg:h-1.5 lg:w-1.5" style={{ background: route.color }} />
+              <Icon size={13} className="h-2.5 w-2.5 lg:h-[13px] lg:w-[13px]" style={{ color: route.color }} aria-hidden="true" />
+              <span className="font-mono text-[8px] font-medium tracking-[0.08em] text-white/90 lg:text-xs lg:tracking-[0.14em]">
+                {compact && route.id === 'response' ? 'Respuesta' : route.label}
+              </span>
             </div>
           </Html>
         )

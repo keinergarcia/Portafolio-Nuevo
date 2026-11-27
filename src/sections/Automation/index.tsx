@@ -8,15 +8,6 @@ const AutomationCanvas = lazy(() =>
   })),
 )
 
-/** Salidas del flujo; en móvil acompañan a la animación como leyenda legible. */
-const OUTPUTS = [
-  { label: 'WhatsApp', color: '#22d3ee' },
-  { label: 'Base de datos', color: '#6366f1' },
-  { label: 'Correo', color: '#a78bfa' },
-  { label: 'API / CRM', color: '#5eead4' },
-  { label: 'Respuesta automática', color: '#e8eef6' },
-] as const
-
 export function AutomationFlow() {
   const isDesktop = useMediaQuery('(min-width: 1024px)')
 
@@ -61,29 +52,10 @@ export function AutomationFlow() {
         <div className="shell relative">
           {heading}
 
-          {/* Misma escena 3D, en un escenario propio para que no se mezcle con el texto */}
+          {/* La misma escena 3D, con su propio escenario y etiquetas compactas */}
           <Suspense fallback={null}>
-            <AutomationCanvas className="relative mt-6 h-[320px] w-full sm:h-[380px]" />
+            <AutomationCanvas className="relative mt-4 h-[320px] w-full sm:h-[380px]" />
           </Suspense>
-
-          <ul
-            className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2"
-            aria-label="Salidas de la automatización"
-          >
-            {OUTPUTS.map((output) => (
-              <li
-                key={output.label}
-                className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.12em] text-white/55 uppercase"
-              >
-                <span
-                  className="h-1.5 w-1.5 rounded-full"
-                  style={{ background: output.color }}
-                  aria-hidden="true"
-                />
-                {output.label}
-              </li>
-            ))}
-          </ul>
 
           <div className="mt-8">{caption}</div>
         </div>
